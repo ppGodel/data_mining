@@ -1,0 +1,41 @@
+#+TITLE: Data Mining
+#+Author: José Anastacio Hernández Saldaña
+#+email: jose.hernandezsal@uanl.edu.mx
+#+Date:<2021-02-01 Mon>
+#+LANGUAGE:  EN
+#+LINK_HOME: http://ppgodel.hopto.org
+#+LINK_MESSAGE: https://discord.gg/zp54hTN
+
+* INFO
+** Instructor
+   José Anastacio Hernández Saldaña, M.C.
+** Class Duration
+   <2021-02-01 Mon>--<2021-05-29 Sat>--<2021-06-05 Sat>
+*** Holidays
+1) Constitution day:: <2021-02-01 Mon>
+2) Benito Juarez/Spring:: <2021-03-15 Mon>
+3) Eastern vacations:: <2021-03-29 Mon>--<2021-04-11 Sun>
+4) Labour day:: <2021-05-01 Sat>
+5) Puebla's battle:: <2021-05-05 Wed>
+6) Teacher's day:: <2021-05-15 Sat>
+** Themes
+1) Class Introduction
+2) Data Cleaning
+3) Data Parsing
+4) Decriptive Statistics
+5) Data Visualization
+6) Statistic Test
+7) Linear Models
+8) Multiple regression
+9) ANOVA
+10) Forecasting
+11) Data classification
+12) Data clustering
+13) Text analysis
+14) Image anayisis
+** Score
+- 10 Practices
+** Tools
+- git/github
+- python
+- IDE/editor de texto
