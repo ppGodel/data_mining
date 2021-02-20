@@ -128,29 +128,6 @@ print_tabulate(df)
 #+RESULTS:
 :results:
 16425.2
-|    | Nombre                              |   Sueldo Neto | dependencia   |   mes |   anio |
-|----+-------------------------------------+---------------+---------------+-------+--------|
-|  0 | ALBERTINA DAVILA PUENTE             |      16425.3  | RECTORIA      |    10 |   2020 |
-|  1 | AMELIA GRACIELA MARTINEZ DE LA PENA |      13645    | RECTORIA      |    10 |   2020 |
-|  2 | AURORA MARINA GOMEZ GUZMAN          |       6105.07 | RECTORIA      |    10 |   2020 |
-|  3 | CARLOS RAFAEL PALOMO ARREDONDO      |       6045.57 | RECTORIA      |    10 |   2020 |
-|  4 | CARMEN ALEJANDRA RAMIREZ GONZALEZ   |       6105.07 | RECTORIA      |    10 |   2020 |
-|  5 | ELIZABETH REYES REYES               |      10526    | RECTORIA      |    10 |   2020 |
-|  6 | ELSA YADIRA QUEZADA DE LA CRUZ      |      17131.8  | RECTORIA      |    10 |   2020 |
-|  7 | HECTOR MANUEL ALMEIDA KAT           |      17252.2  | RECTORIA      |    10 |   2020 |
-|  8 | JESUS VARGAS ROMERO                 |      10499.4  | RECTORIA      |    10 |   2020 |
-|  9 | JORGE ALBERTO MORENO MORALES        |      38638.2  | RECTORIA      |    10 |   2020 |
-| 10 | JORGE HUMBERTO CISNEROS GONZALEZ    |      30301.8  | RECTORIA      |    10 |   2020 |
-| 11 | JUAN ISIDRO GONZALEZ FLORES         |       9695.07 | RECTORIA      |    10 |   2020 |
-| 12 | MARIA CRISTINA RODRIGUEZ BRIONES    |       8136.83 | RECTORIA      |    10 |   2020 |
-| 13 | MARIA GUADALUPE MEJIA RODRIGUEZ     |      16455    | RECTORIA      |    10 |   2020 |
-| 14 | MAYRA THELMA COVARRUBIAS MARTINEZ   |      66103.2  | RECTORIA      |    10 |   2020 |
-| 15 | NANCY PATRICIA SAUCEDO HERNANDEZ    |       5802.67 | RECTORIA      |    10 |   2020 |
-| 16 | OLGA DEL SOCORRO ALMARAZ CORTES     |      22997.6  | RECTORIA      |    10 |   2020 |
-| 17 | PATRICIA ELENA NIÑO GONZALEZ        |       9605.71 | RECTORIA      |    10 |   2020 |
-| 18 | ROGELIO GUILLERMO GARZA RIVERA      |      76717.4  | RECTORIA      |    10 |   2020 |
-| 19 | VERONICA DANIELA ARREDONDO ARIAS    |       8140.14 | RECTORIA      |    10 |   2020 |
-| 20 | VICTOR EDUARDO SANCHEZ PLASCENCIA   |      74360.5  | RECTORIA      |    10 |   2020 |
 :end:
 
 
