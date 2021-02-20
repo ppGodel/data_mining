@@ -232,7 +232,12 @@ df.columns = ['estado',
        'fecha_de_admision']
 # print(df.columns)
 df['lugar'] = df['lugar'].transform(remove_repeated_number)
+df['poblacion_2020'] = df['poblacion_2020'].transform(remove_repeated_number)
 df['fecha_de_admision'] = df['fecha_de_admision'].transform(remove_repeated_date)
+areas= df['area'].transform(limpiar_area).to_list()
+df['area_km'] =[a[0] for a in areas]
+df['area_mi'] =[a[1] for a in areas]
+df = df.drop(['area'], axis=1)
 print_tabulate(df)
 df.to_csv("estados_limpio.csv", index=False)
 
@@ -240,40 +245,40 @@ df.to_csv("estados_limpio.csv", index=False)
 
 #+RESULTS:
 :results:
-|    | estado              | nombre_oficial                 | capital                   | ciudad_mas_grande         | area                                   | poblacion_2020     | num_de_municipios | lugar | fecha_de_admision   |
-|----+---------------------+--------------------------------+---------------------------+---------------------------+----------------------------------------+--------------------+-------------------+-------+---------------------|
-|  0 | Aguascalientes      | Aguascalientes                 | Aguascalientes            | Aguascalientes            | 005615.75,615.7 km2 (2,168.2 sq mi)    | 014256071,425,607  |                11 |    24 | 1857-02-05 00:00:00 |
-|  1 | Baja California     | Baja California                | Mexicali                  | Tijuana                   | 071450.071,450.0 km2 (27,587.0 sq mi)  | 037690203,769,020  |                 6 |    29 | 1952-01-16 00:00:00 |
-|  2 | Baja California Sur | Baja California Sur            | La Paz                    | La Paz                    | 073909.473,909.4 km2 (28,536.6 sq mi)  | 00798447798,447    |                 5 |    31 | 1974-10-08 00:00:00 |
-|  3 | Campeche            | Campeche                       | San Francisco de Campeche | San Francisco de Campeche | 057484.957,484.9 km2 (22,195.0 sq mi)  | 00928363928,363    |                13 |    25 | 1863-04-29 00:00:00 |
-|  4 | Chiapas             | Chiapas                        | Tuxtla Gutiérrez          | Tuxtla Gutiérrez          | 073311.073,311.0 km2 (28,305.5 sq mi)  | 055438285,543,828  |               124 |    19 | 1824-09-14 00:00:00 |
-|  5 | Chihuahua           | Chihuahua                      | Chihuahua                 | Ciudad Juárez             | 247412.6247,412.6 km2 (95,526.5 sq mi) | 037418693,741,869  |                67 |    18 | 1824-07-06 00:00:00 |
-|  6 | Mexico City         | Ciudad de México               | nan                       | nan                       | 001494.31,494.3 km2 (577.0 sq mi)      | 092099449,209,944  |                16 |    32 | 1824-09-14 00:00:00 |
-|  7 | Coahuila1 4         | Coahuila de Zaragoza           | Saltillo                  | Saltillo                  | 151594.8151,594.8 km2 (58,531.1 sq mi) | 031467713,146,771  |                38 |    16 | 1824-05-07 00:00:00 |
-|  8 | Colima6             | Colima                         | Colima                    | Manzanillo                | 005626.95,626.9 km2 (2,172.6 sq mi)    | 00731391731,391    |                10 |    23 | 1856-09-12 00:00:00 |
-|  9 | Durango             | Durango                        | Victoria de Durango       | Victoria de Durango       | 123364.0123,364.0 km2 (47,631.1 sq mi) | 018326501,832,650  |                39 |    17 | 1824-05-22 00:00:00 |
-| 10 | Guanajuato          | Guanajuato                     | Guanajuato                | León                      | 030606.730,606.7 km2 (11,817.3 sq mi)  | 061669346,166,934  |                46 |     2 | 1823-12-20 00:00:00 |
-| 11 | Guerrero            | Guerrero                       | Chilpancingo              | Acapulco                  | 063595.963,595.9 km2 (24,554.5 sq mi)  | 035406853,540,685  |                81 |    21 | 1849-10-27 00:00:00 |
-| 12 | Hidalgo             | Hidalgo                        | Pachuca                   | Pachuca                   | 020821.420,821.4 km2 (8,039.2 sq mi)   | 030828413,082,841  |                84 |    26 | 1869-01-16 00:00:00 |
-| 13 | Jalisco             | Jalisco                        | Guadalajara               | Guadalajara               | 078595.978,595.9 km2 (30,346.0 sq mi)  | 083481518,348,151  |               125 |     9 | 1823-12-23 00:00:00 |
-| 14 | México              | México                         | Toluca de Lerdo           | Ecatepec de Morelos       | 022351.822,351.8 km2 (8,630.1 sq mi)   | 1699241816,992,418 |               125 |     1 | 1823-12-20 00:00:00 |
-| 15 | Michoacán           | Michoacán de Ocampo            | Morelia                   | Morelia                   | 058598.758,598.7 km2 (22,625.1 sq mi)  | 047488464,748,846  |               113 |     5 | 1823-12-22 00:00:00 |
-| 16 | Morelos             | Morelos                        | Cuernavaca                | Cuernavaca                | 004878.94,878.9 km2 (1,883.8 sq mi)    | 019715201,971,520  |                36 |    27 | 1869-04-17 00:00:00 |
-| 17 | Nayarit             | Nayarit                        | Tepic                     | Tepic                     | 027856.527,856.5 km2 (10,755.5 sq mi)  | 012354561,235,456  |                20 |    28 | 1917-01-26 00:00:00 |
-| 18 | Nuevo León4         | Nuevo León                     | Monterrey                 | Monterrey                 | 064156.264,156.2 km2 (24,770.8 sq mi)  | 057844425,784,442  |                51 |    15 | 1824-05-07 00:00:00 |
-| 19 | Oaxaca              | Oaxaca                         | Oaxaca                    | Oaxaca                    | 093757.693,757.6 km2 (36,200.0 sq mi)  | 041321484,132,148  |               570 |     3 | 1823-12-21 00:00:00 |
-| 20 | Puebla              | Puebla                         | Puebla                    | Puebla                    | 034309.634,309.6 km2 (13,247.0 sq mi)  | 065832786,583,278  |               217 |     4 | 1823-12-21 00:00:00 |
-| 21 | Querétaro           | Querétaro de Arteaga           | Querétaro                 | Querétaro                 | 011690.611,690.6 km2 (4,513.8 sq mi)   | 023684672,368,467  |                18 |    11 | 1823-12-23 00:00:00 |
-| 22 | Quintana Roo        | Quintana Roo                   | Chetumal                  | Cancún                    | 044705.244,705.2 km2 (17,260.8 sq mi)  | 018579851,857,985  |                11 |    30 | 1974-10-08 00:00:00 |
-| 23 | San Luis Potosí     | San Luis Potosí                | San Luis Potosí           | San Luis Potosí           | 061138.061,138.0 km2 (23,605.5 sq mi)  | 02,8222552,822,255 |                58 |     6 | 1823-12-22 00:00:00 |
-| 24 | Sinaloa             | Sinaloa                        | Culiacán                  | Culiacán                  | 057365.457,365.4 km2 (22,148.9 sq mi)  | 030269433,026,943  |                18 |    20 | 1830-10-14 00:00:00 |
-| 25 | Sonora2             | Sonora                         | Hermosillo                | Hermosillo                | 179354.7179,354.7 km2 (69,249.2 sq mi) | 029448402,944,840  |                72 |    12 | 1824-01-10 00:00:00 |
-| 26 | Tabasco5            | Tabasco                        | Villahermosa              | Villahermosa              | 024730.924,730.9 km2 (9,548.7 sq mi)   | 024025982,402,598  |                17 |    13 | 1824-02-07 00:00:00 |
-| 27 | Tamaulipas4         | Tamaulipas                     | Ciudad Victoria           | Reynosa                   | 080249.380,249.3 km2 (30,984.4 sq mi)  | 035277353,527,735  |                43 |    14 | 1824-02-07 00:00:00 |
-| 28 | Tlaxcala            | Tlaxcala                       | Tlaxcala                  | San Pablo del Monte       | 003996.63,996.6 km2 (1,543.1 sq mi)    | 013429771,342,977  |                60 |    22 | 1856-12-09 00:00:00 |
-| 29 | Veracruz            | Veracruz deIgnacio de la Llave | Xalapa                    | Veracruz                  | 071823.571,823.5 km2 (27,731.2 sq mi)  | 080625798,062,579  |               212 |     7 | 1823-12-22 00:00:00 |
-| 30 | Yucatán3            | Yucatán                        | Mérida                    | Mérida                    | 039524.439,524.4 km2 (15,260.5 sq mi)  | 023208982,320,898  |               106 |     8 | 1823-12-23 00:00:00 |
-| 31 | Zacatecas           | Zacatecas                      | Zacatecas                 | Guadalupe                 | 075275.375,275.3 km2 (29,064.0 sq mi)  | 016221381,622,138  |                58 |    10 | 1823-12-23 00:00:00 |
+|    | estado              | nombre_oficial                 | capital                   | ciudad_mas_grande         | poblacion_2020 | num_de_municipios | lugar | fecha_de_admision   | area_km | area_mi |
+|----+---------------------+--------------------------------+---------------------------+---------------------------+----------------+-------------------+-------+---------------------+---------+---------|
+|  0 | Aguascalientes      | Aguascalientes                 | Aguascalientes            | Aguascalientes            |    1.42561e+06 |                11 |    24 | 1857-02-05 00:00:00 |  5615.7 |  2168.2 |
+|  1 | Baja California     | Baja California                | Mexicali                  | Tijuana                   |    3.76902e+06 |                 6 |    29 | 1952-01-16 00:00:00 |   71450 |   27587 |
+|  2 | Baja California Sur | Baja California Sur            | La Paz                    | La Paz                    |         798447 |                 5 |    31 | 1974-10-08 00:00:00 | 73909.4 | 28536.6 |
+|  3 | Campeche            | Campeche                       | San Francisco de Campeche | San Francisco de Campeche |         928363 |                13 |    25 | 1863-04-29 00:00:00 | 57484.9 |   22195 |
+|  4 | Chiapas             | Chiapas                        | Tuxtla Gutiérrez          | Tuxtla Gutiérrez          |    5.54383e+06 |               124 |    19 | 1824-09-14 00:00:00 |   73311 | 28305.5 |
+|  5 | Chihuahua           | Chihuahua                      | Chihuahua                 | Ciudad Juárez             |    3.74187e+06 |                67 |    18 | 1824-07-06 00:00:00 |  247413 | 95526.5 |
+|  6 | Mexico City         | Ciudad de México               | nan                       | nan                       |    9.20994e+06 |                16 |    32 | 1824-09-14 00:00:00 |  1494.3 |     577 |
+|  7 | Coahuila1 4         | Coahuila de Zaragoza           | Saltillo                  | Saltillo                  |    3.14677e+06 |                38 |    16 | 1824-05-07 00:00:00 |  151595 | 58531.1 |
+|  8 | Colima6             | Colima                         | Colima                    | Manzanillo                |         731391 |                10 |    23 | 1856-09-12 00:00:00 |  5626.9 |  2172.6 |
+|  9 | Durango             | Durango                        | Victoria de Durango       | Victoria de Durango       |    1.83265e+06 |                39 |    17 | 1824-05-22 00:00:00 |  123364 | 47631.1 |
+| 10 | Guanajuato          | Guanajuato                     | Guanajuato                | León                      |    6.16693e+06 |                46 |     2 | 1823-12-20 00:00:00 | 30606.7 | 11817.3 |
+| 11 | Guerrero            | Guerrero                       | Chilpancingo              | Acapulco                  |    3.54068e+06 |                81 |    21 | 1849-10-27 00:00:00 | 63595.9 | 24554.5 |
+| 12 | Hidalgo             | Hidalgo                        | Pachuca                   | Pachuca                   |    3.08284e+06 |                84 |    26 | 1869-01-16 00:00:00 | 20821.4 |  8039.2 |
+| 13 | Jalisco             | Jalisco                        | Guadalajara               | Guadalajara               |    8.34815e+06 |               125 |     9 | 1823-12-23 00:00:00 | 78595.9 |   30346 |
+| 14 | México              | México                         | Toluca de Lerdo           | Ecatepec de Morelos       |    1.69924e+07 |               125 |     1 | 1823-12-20 00:00:00 | 22351.8 |  8630.1 |
+| 15 | Michoacán           | Michoacán de Ocampo            | Morelia                   | Morelia                   |    4.74885e+06 |               113 |     5 | 1823-12-22 00:00:00 | 58598.7 | 22625.1 |
+| 16 | Morelos             | Morelos                        | Cuernavaca                | Cuernavaca                |    1.97152e+06 |                36 |    27 | 1869-04-17 00:00:00 |  4878.9 |  1883.8 |
+| 17 | Nayarit             | Nayarit                        | Tepic                     | Tepic                     |    1.23546e+06 |                20 |    28 | 1917-01-26 00:00:00 | 27856.5 | 10755.5 |
+| 18 | Nuevo León4         | Nuevo León                     | Monterrey                 | Monterrey                 |    5.78444e+06 |                51 |    15 | 1824-05-07 00:00:00 | 64156.2 | 24770.8 |
+| 19 | Oaxaca              | Oaxaca                         | Oaxaca                    | Oaxaca                    |    4.13215e+06 |               570 |     3 | 1823-12-21 00:00:00 | 93757.6 |   36200 |
+| 20 | Puebla              | Puebla                         | Puebla                    | Puebla                    |    6.58328e+06 |               217 |     4 | 1823-12-21 00:00:00 | 34309.6 |   13247 |
+| 21 | Querétaro           | Querétaro de Arteaga           | Querétaro                 | Querétaro                 |    2.36847e+06 |                18 |    11 | 1823-12-23 00:00:00 | 11690.6 |  4513.8 |
+| 22 | Quintana Roo        | Quintana Roo                   | Chetumal                  | Cancún                    |    1.85798e+06 |                11 |    30 | 1974-10-08 00:00:00 | 44705.2 | 17260.8 |
+| 23 | San Luis Potosí     | San Luis Potosí                | San Luis Potosí           | San Luis Potosí           |    2.82226e+06 |                58 |     6 | 1823-12-22 00:00:00 |   61138 | 23605.5 |
+| 24 | Sinaloa             | Sinaloa                        | Culiacán                  | Culiacán                  |    3.02694e+06 |                18 |    20 | 1830-10-14 00:00:00 | 57365.4 | 22148.9 |
+| 25 | Sonora2             | Sonora                         | Hermosillo                | Hermosillo                |    2.94484e+06 |                72 |    12 | 1824-01-10 00:00:00 |  179355 | 69249.2 |
+| 26 | Tabasco5            | Tabasco                        | Villahermosa              | Villahermosa              |     2.4026e+06 |                17 |    13 | 1824-02-07 00:00:00 | 24730.9 |  9548.7 |
+| 27 | Tamaulipas4         | Tamaulipas                     | Ciudad Victoria           | Reynosa                   |    3.52774e+06 |                43 |    14 | 1824-02-07 00:00:00 | 80249.3 | 30984.4 |
+| 28 | Tlaxcala            | Tlaxcala                       | Tlaxcala                  | San Pablo del Monte       |    1.34298e+06 |                60 |    22 | 1856-12-09 00:00:00 |  3996.6 |  1543.1 |
+| 29 | Veracruz            | Veracruz deIgnacio de la Llave | Xalapa                    | Veracruz                  |    8.06258e+06 |               212 |     7 | 1823-12-22 00:00:00 | 71823.5 | 27731.2 |
+| 30 | Yucatán3            | Yucatán                        | Mérida                    | Mérida                    |     2.3209e+06 |               106 |     8 | 1823-12-23 00:00:00 | 39524.4 | 15260.5 |
+| 31 | Zacatecas           | Zacatecas                      | Zacatecas                 | Guadalupe                 |    1.62214e+06 |                58 |    10 | 1823-12-23 00:00:00 | 75275.3 |   29064 |
 :end:
 
 #+BEGIN_SRC python :session data :results replace drawer output :exports both
