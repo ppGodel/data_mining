@@ -1,0 +1,33 @@
+estado,nombre_oficial,capital,ciudad_mas_grande,poblacion_2020,num_de_municipios,lugar,fecha_de_admision,area_km,area_mi
+Aguascalientes,Aguascalientes,Aguascalientes,Aguascalientes,1425607.0,11,24.0,1857-02-05,5615.7,2168.2
+Baja California,Baja California,Mexicali,Tijuana,3769020.0,6,29.0,1952-01-16,71450.0,27587.0
+Baja California Sur,Baja California Sur,La Paz,La Paz,798447.0,5,31.0,1974-10-08,73909.4,28536.6
+Campeche,Campeche,San Francisco de Campeche,San Francisco de Campeche,928363.0,13,25.0,1863-04-29,57484.9,22195.0
+Chiapas,Chiapas,Tuxtla Gutiérrez,Tuxtla Gutiérrez,5543828.0,124,19.0,1824-09-14,73311.0,28305.5
+Chihuahua,Chihuahua,Chihuahua,Ciudad Juárez,3741869.0,67,18.0,1824-07-06,247412.6,95526.5
+Mexico City,Ciudad de México,,,9209944.0,16,32.0,1824-09-14,1494.3,577.0
+Coahuila1 4,Coahuila de Zaragoza,Saltillo,Saltillo,3146771.0,38,16.0,1824-05-07,151594.8,58531.1
+Colima6,Colima,Colima,Manzanillo,731391.0,10,23.0,1856-09-12,5626.9,2172.6
+Durango,Durango,Victoria de Durango,Victoria de Durango,1832650.0,39,17.0,1824-05-22,123364.0,47631.1
+Guanajuato,Guanajuato,Guanajuato,León,6166934.0,46,2.0,1823-12-20,30606.7,11817.3
+Guerrero,Guerrero,Chilpancingo,Acapulco,3540685.0,81,21.0,1849-10-27,63595.9,24554.5
+Hidalgo,Hidalgo,Pachuca,Pachuca,3082841.0,84,26.0,1869-01-16,20821.4,8039.2
+Jalisco,Jalisco,Guadalajara,Guadalajara,8348151.0,125,9.0,1823-12-23,78595.9,30346.0
+México,México,Toluca de Lerdo,Ecatepec de Morelos,16992418.0,125,1.0,1823-12-20,22351.8,8630.1
+Michoacán,Michoacán de Ocampo,Morelia,Morelia,4748846.0,113,5.0,1823-12-22,58598.7,22625.1
+Morelos,Morelos,Cuernavaca,Cuernavaca,1971520.0,36,27.0,1869-04-17,4878.9,1883.8
+Nayarit,Nayarit,Tepic,Tepic,1235456.0,20,28.0,1917-01-26,27856.5,10755.5
+Nuevo León4,Nuevo León,Monterrey,Monterrey,5784442.0,51,15.0,1824-05-07,64156.2,24770.8
+Oaxaca,Oaxaca,Oaxaca,Oaxaca,4132148.0,570,3.0,1823-12-21,93757.6,36200.0
+Puebla,Puebla,Puebla,Puebla,6583278.0,217,4.0,1823-12-21,34309.6,13247.0
+Querétaro,Querétaro de Arteaga,Querétaro,Querétaro,2368467.0,18,11.0,1823-12-23,11690.6,4513.8
+Quintana Roo,Quintana Roo,Chetumal,Cancún,1857985.0,11,30.0,1974-10-08,44705.2,17260.8
+San Luis Potosí,San Luis Potosí,San Luis Potosí,San Luis Potosí,2822255.0,58,6.0,1823-12-22,61138.0,23605.5
+Sinaloa,Sinaloa,Culiacán,Culiacán,3026943.0,18,20.0,1830-10-14,57365.4,22148.9
+Sonora2,Sonora,Hermosillo,Hermosillo,2944840.0,72,12.0,1824-01-10,179354.7,69249.2
+Tabasco5,Tabasco,Villahermosa,Villahermosa,2402598.0,17,13.0,1824-02-07,24730.9,9548.7
+Tamaulipas4,Tamaulipas,Ciudad Victoria,Reynosa,3527735.0,43,14.0,1824-02-07,80249.3,30984.4
+Tlaxcala,Tlaxcala,Tlaxcala,San Pablo del Monte,1342977.0,60,22.0,1856-12-09,3996.6,1543.1
+Veracruz,Veracruz deIgnacio de la Llave,Xalapa,Veracruz,8062579.0,212,7.0,1823-12-22,71823.5,27731.2
+Yucatán3,Yucatán,Mérida,Mérida,2320898.0,106,8.0,1823-12-23,39524.4,15260.5
+Zacatecas,Zacatecas,Zacatecas,Guadalupe,1622138.0,58,10.0,1823-12-23,75275.3,29064.0

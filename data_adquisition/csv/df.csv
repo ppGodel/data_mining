@@ -1,0 +1,195 @@
+,Country,Region,Random
+0,Algeria,AFRICA,44
+1,Angola,AFRICA,3
+2,Benin,AFRICA,8
+3,Botswana,AFRICA,8
+4,Burkina,AFRICA,69
+5,Burundi,AFRICA,91
+6,Cameroon,AFRICA,39
+7,Cape Verde,AFRICA,82
+8,Central African Republic,AFRICA,29
+9,Chad,AFRICA,44
+10,Comoros,AFRICA,8
+11,Congo,AFRICA,9
+12,"Congo, Democratic Republic of",AFRICA,81
+13,Djibouti,AFRICA,96
+14,Egypt,AFRICA,55
+15,Equatorial Guinea,AFRICA,78
+16,Eritrea,AFRICA,14
+17,Ethiopia,AFRICA,86
+18,Gabon,AFRICA,81
+19,Gambia,AFRICA,57
+20,Ghana,AFRICA,76
+21,Guinea,AFRICA,58
+22,Guinea-Bissau,AFRICA,95
+23,Ivory Coast,AFRICA,22
+24,Kenya,AFRICA,30
+25,Lesotho,AFRICA,31
+26,Liberia,AFRICA,95
+27,Libya,AFRICA,9
+28,Madagascar,AFRICA,26
+29,Malawi,AFRICA,4
+30,Mali,AFRICA,29
+31,Mauritania,AFRICA,8
+32,Mauritius,AFRICA,10
+33,Morocco,AFRICA,57
+34,Mozambique,AFRICA,17
+35,Namibia,AFRICA,29
+36,Niger,AFRICA,1
+37,Nigeria,AFRICA,94
+38,Rwanda,AFRICA,3
+39,Sao Tome and Principe,AFRICA,58
+40,Senegal,AFRICA,82
+41,Seychelles,AFRICA,14
+42,Sierra Leone,AFRICA,96
+43,Somalia,AFRICA,84
+44,South Africa,AFRICA,39
+45,South Sudan,AFRICA,26
+46,Sudan,AFRICA,6
+47,Swaziland,AFRICA,96
+48,Tanzania,AFRICA,44
+49,Togo,AFRICA,94
+50,Tunisia,AFRICA,57
+51,Uganda,AFRICA,8
+52,Zambia,AFRICA,22
+53,Zimbabwe,AFRICA,8
+54,Afghanistan,ASIA,6
+55,Bahrain,ASIA,83
+56,Bangladesh,ASIA,29
+57,Bhutan,ASIA,3
+58,Brunei,ASIA,31
+59,Burma,ASIA,26
+60,Cambodia,ASIA,3
+61,China,ASIA,83
+62,East Timor,ASIA,36
+63,India,ASIA,30
+64,Indonesia,ASIA,39
+65,Iran,ASIA,81
+66,Iraq,ASIA,86
+67,Israel,ASIA,36
+68,Japan,ASIA,100
+69,Jordan,ASIA,78
+70,Kazakhstan,ASIA,17
+71,"Korea, North",ASIA,69
+72,"Korea, South",ASIA,27
+73,Kuwait,ASIA,27
+74,Kyrgyzstan,ASIA,94
+75,Laos,ASIA,78
+76,Lebanon,ASIA,17
+77,Malaysia,ASIA,8
+78,Maldives,ASIA,84
+79,Mongolia,ASIA,6
+80,Nepal,ASIA,49
+81,Oman,ASIA,82
+82,Pakistan,ASIA,76
+83,Philippines,ASIA,31
+84,Qatar,ASIA,81
+85,Russian Federation,ASIA,10
+86,Saudi Arabia,ASIA,91
+87,Singapore,ASIA,48
+88,Sri Lanka,ASIA,83
+89,Syria,ASIA,30
+90,Tajikistan,ASIA,69
+91,Thailand,ASIA,76
+92,Turkey,ASIA,26
+93,Turkmenistan,ASIA,100
+94,United Arab Emirates,ASIA,48
+95,Uzbekistan,ASIA,83
+96,Vietnam,ASIA,58
+97,Yemen,ASIA,100
+98,Albania,EUROPE,84
+99,Andorra,EUROPE,78
+100,Armenia,EUROPE,22
+101,Austria,EUROPE,8
+102,Azerbaijan,EUROPE,48
+103,Belarus,EUROPE,81
+104,Belgium,EUROPE,83
+105,Bosnia and Herzegovina,EUROPE,100
+106,Bulgaria,EUROPE,86
+107,Croatia,EUROPE,58
+108,Cyprus,EUROPE,8
+109,Czech Republic,EUROPE,58
+110,Denmark,EUROPE,44
+111,Estonia,EUROPE,8
+112,Finland,EUROPE,8
+113,France,EUROPE,100
+114,Georgia,EUROPE,84
+115,Germany,EUROPE,8
+116,Greece,EUROPE,48
+117,Hungary,EUROPE,14
+118,Iceland,EUROPE,17
+119,Ireland,EUROPE,76
+120,Italy,EUROPE,8
+121,Latvia,EUROPE,6
+122,Liechtenstein,EUROPE,55
+123,Lithuania,EUROPE,26
+124,Luxembourg,EUROPE,14
+125,Macedonia,EUROPE,83
+126,Malta,EUROPE,78
+127,Moldova,EUROPE,2
+128,Monaco,EUROPE,29
+129,Montenegro,EUROPE,78
+130,Netherlands,EUROPE,69
+131,Norway,EUROPE,83
+132,Poland,EUROPE,36
+133,Portugal,EUROPE,78
+134,Romania,EUROPE,55
+135,San Marino,EUROPE,29
+136,Serbia,EUROPE,8
+137,Slovakia,EUROPE,94
+138,Slovenia,EUROPE,8
+139,Spain,EUROPE,39
+140,Sweden,EUROPE,86
+141,Switzerland,EUROPE,9
+142,Ukraine,EUROPE,8
+143,United Kingdom,EUROPE,8
+144,Vatican City,EUROPE,69
+145,Antigua and Barbuda,NORTH AMERICA,83
+146,Bahamas,NORTH AMERICA,39
+147,Barbados,NORTH AMERICA,3
+148,Belize,NORTH AMERICA,83
+149,Canada,NORTH AMERICA,100
+150,Costa Rica,NORTH AMERICA,76
+151,Cuba,NORTH AMERICA,31
+152,Dominica,NORTH AMERICA,14
+153,Dominican Republic,NORTH AMERICA,17
+154,El Salvador,NORTH AMERICA,4
+155,Grenada,NORTH AMERICA,26
+156,Guatemala,NORTH AMERICA,1
+157,Haiti,NORTH AMERICA,8
+158,Honduras,NORTH AMERICA,86
+159,Jamaica,NORTH AMERICA,94
+160,Mexico,NORTH AMERICA,8
+161,Nicaragua,NORTH AMERICA,55
+162,Panama,NORTH AMERICA,100
+163,Saint Kitts and Nevis,NORTH AMERICA,95
+164,Saint Lucia,NORTH AMERICA,78
+165,Saint Vincent and the Grenadines,NORTH AMERICA,29
+166,Trinidad and Tobago,NORTH AMERICA,48
+167,United States,NORTH AMERICA,78
+168,Australia,OCEANIA,10
+169,Fiji,OCEANIA,10
+170,Kiribati,OCEANIA,27
+171,Marshall Islands,OCEANIA,30
+172,Micronesia,OCEANIA,76
+173,Nauru,OCEANIA,8
+174,New Zealand,OCEANIA,10
+175,Palau,OCEANIA,31
+176,Papua New Guinea,OCEANIA,91
+177,Samoa,OCEANIA,10
+178,Solomon Islands,OCEANIA,26
+179,Tonga,OCEANIA,44
+180,Tuvalu,OCEANIA,36
+181,Vanuatu,OCEANIA,22
+182,Argentina,SOUTH AMERICA,6
+183,Bolivia,SOUTH AMERICA,30
+184,Brazil,SOUTH AMERICA,49
+185,Chile,SOUTH AMERICA,49
+186,Colombia,SOUTH AMERICA,22
+187,Ecuador,SOUTH AMERICA,1
+188,Guyana,SOUTH AMERICA,84
+189,Paraguay,SOUTH AMERICA,29
+190,Peru,SOUTH AMERICA,4
+191,Suriname,SOUTH AMERICA,55
+192,Uruguay,SOUTH AMERICA,26
+193,Venezuela,SOUTH AMERICA,8
