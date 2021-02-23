@@ -1,8 +1,8 @@
 #+TITLE: Data Adquisition
 
 * Function declaration
-
-#+BEGIN_SRC python :session data :results replace drawer output :exports both :tangle data_adqisition.py
+#+NAME: includes-base-fn
+#+BEGIN_SRC python :session data :results replace drawer output :exports both
 import requests
 import io
 from bs4 import BeautifulSoup
@@ -31,20 +31,10 @@ def print_tabulate(df: pd.DataFrame):
 :end:
 
 ** UANL
+Código para extraer la información de transparencia de la UANL
 
-#+BEGIN_SRC python :session data :results replace drawer output
-soup = get_soup(f"http://transparencia.uanl.mx/remuneraciones_mensuales/bxd.php?pag_act=2&id_area_form=2305&mya_det=112020")
-table = soup.find_all("table")[1].find_all('a')
-print(table)
-#+END_SRC
-
-#+RESULTS:
-:results:
-[<a href="bxd.php?pag_act=1&amp;id_area_form=2305&amp;mya_det=112020">1</a>, <a href="bxd.php?pag_act=3&amp;id_area_form=2305&amp;mya_det=112020">3</a>, <a href="bxd.php?pag_act=4&amp;id_area_form=2305&amp;mya_det=112020">4</a>, <a href="bxd.php?pag_act=5&amp;id_area_form=2305&amp;mya_det=112020">5</a>, <a href="bxd.php?pag_act=6&amp;id_area_form=2305&amp;mya_det=112020">6</a>, <a href="bxd.php?pag_act=7&amp;id_area_form=2305&amp;mya_det=112020">7</a>, <a href="bxd.php?pag_act=8&amp;id_area_form=2305&amp;mya_det=112020">8</a>, <a href="bxd.php?pag_act=9&amp;id_area_form=2305&amp;mya_det=112020">9</a>, <a href="bxd.php?pag_act=10&amp;id_area_form=2305&amp;mya_det=112020">10</a>, <a href="bxd.php?pag_act=11&amp;id_area_form=2305&amp;mya_det=112020">11</a>, <a href="bxd.php?pag_act=12&amp;id_area_form=2305&amp;mya_det=112020">12</a>]
-:end:
-
-#+BEGIN_SRC python :session data :results replace drawer output :exports both
-
+#+BEGIN_SRC python :session data :results replace drawer output :exports both :tangle data_extraction_uanl.py :noweb yes
+<<includes-base-fn>>
 def limpiar_nombre_dependencia(nombre_sucio:str)->str:
     nombre_en_partes = nombre_sucio.split(' ')
     return ' '.join(nombre_en_partes[2:])
@@ -117,24 +107,12 @@ df.to_csv("uanl.csv", index=False)
 :end:
 
 
-#+BEGIN_SRC python :session data :results replace drawer output :exports both
-
-df = pd.read_csv("uanl.csv")
-df["dependencia"] = ["RECTORIA" for i in range(0, obtener_cantidad_de_filas(df))]
-df["mes"] = ["10" for i in range(0, obtener_cantidad_de_filas(df))]
-df["anio"] = ["2020" for i in range(0, obtener_cantidad_de_filas(df))]
-df["Sueldo Neto"] = df["Sueldo Neto"].transform(limpiar_dato_sueldo)
-print_tabulate(df)
-#+END_SRC
-
-#+RESULTS:
-:results:
-16425.2
-:end:
-
 
 ** wiki
-#+BEGIN_SRC python :session data :results replace drawer output :exports both
+Código para extraer la información de los estadaos de méxico de la pagina de wikipedia
+
+#+BEGIN_SRC python :session data :results replace drawer output :exports both :noweb yes :tangle data_adquisition_estados.py
+<<imports-base-fn>>
 def wiki() -> pd.DataFrame:
     soup = get_soup("https://en.wikipedia.org/wiki/List_of_states_of_Mexico")
     list_of_lists = [] # :List
@@ -194,7 +172,7 @@ df.to_csv("estados.csv", index=False)
 | 31 | Zacatecas           | Zacatecas                                                             |              | Zacatecas                 | Guadalupe                 | 075275.375,275.3 km2 (29,064.0 sq mi)  | 016221381,622,138    |             58 |                            1010 | 182312231823-12-23[12]         |
 :end:
 
-#+BEGIN_SRC python :session data :results replace drawer output :exports both
+#+BEGIN_SRC python :session data :results replace drawer output :exports both :tangle data_adquisition_estados.py
 def remove_repeated_number(str_repeated_value:str)->float:
     if(type(str_repeated_value)!=str):
         str_repeated_value = str(str_repeated_value)
@@ -235,7 +213,7 @@ df['lugar'] = df['lugar'].transform(remove_repeated_number)
 df['poblacion_2020'] = df['poblacion_2020'].transform(remove_repeated_number)
 df['fecha_de_admision'] = df['fecha_de_admision'].transform(remove_repeated_date)
 areas= df['area'].transform(limpiar_area).to_list()
-df['area_km'] =[a[0] for a in areas]
+df['area_km2'] =[a[0] for a in areas]
 df['area_mi'] =[a[1] for a in areas]
 df = df.drop(['area'], axis=1)
 print_tabulate(df)
@@ -281,40 +259,8 @@ df.to_csv("estados_limpio.csv", index=False)
 | 31 | Zacatecas           | Zacatecas                      | Zacatecas                 | Guadalupe                 |    1.62214e+06 |                58 |    10 | 1823-12-23 00:00:00 | 75275.3 |   29064 |
 :end:
 
-#+BEGIN_SRC python :session data :results replace drawer output :exports both
-def remove_repeated_number(str_repeated_value:str)->float:
-    str_sin_0 = re.sub("^0+", '', str_repeated_value)
-    str_sin_comma = str_sin_0.replace(',','')
-    num = 0.0
-    if len(str_sin_comma) % 2 == 0:
-        mitad = int(len(str_sin_comma)/2)
-        num = float(str_sin_comma[0:mitad])
-    return num
-
-
-def limpiar_area(area:str)->Tuple[float,float]:
-    str_en_partes = re.findall(r'[\d,\.]*', area)
-    str_en_partes.remove('2')
-    blancos = str_en_partes.count('')
-    for blanco in range(0, blancos):
-        str_en_partes.remove('')
-
-    km_str = str_en_partes[0]
-    km_float = remove_repeated_number(km_str)
-    mi_str = str_en_partes[1]
-    mi_float = float(mi_str.replace(',',''))
-    return (km_float, mi_float)
-print(limpiar_area('075275.375,275.3 km2 (29,064.0 sq mi)'))
-#print(remove_repeated_number('075275.375,275.3'))
-#print_tabulate(df)
-#+END_SRC
-
-#+RESULTS:
-:results:
-(75275.3, 29064.0)
-:end:
-
 ** csv
+Crear un data frame desde un archivo csv.
 *** from file
 #+BEGIN_SRC python :session data :results replace drawer output :exports both
 df = pd.read_csv("/home/jhernandez/Sync/FCFMClases/21-1FJ/DataMining/dm_lmv_6.csv")
