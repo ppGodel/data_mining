@@ -1,3 +1,25 @@
+import requests
+import io
+from bs4 import BeautifulSoup
+import pandas as pd
+from tabulate import tabulate
+from typing import Tuple, List
+import re
+import datetime
+
+def get_soup(url: str) -> BeautifulSoup:
+    response = requests.get(url)
+    return BeautifulSoup(response.content, 'html.parser')
+
+def get_csv_from_url(url:str) -> pd.DataFrame:
+    s=requests.get(url).content
+    return pd.read_csv(io.StringIO(s.decode('utf-8')))
+
+def print_tabulate(df: pd.DataFrame):
+    print(tabulate(df, headers=df.columns, tablefmt='orgtbl'))
+
+
+
 def wiki() -> pd.DataFrame:
     soup = get_soup("https://en.wikipedia.org/wiki/List_of_states_of_Mexico")
     list_of_lists = [] # :List

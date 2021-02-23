@@ -112,7 +112,8 @@ df.to_csv("uanl.csv", index=False)
 Código para extraer la información de los estadaos de méxico de la pagina de wikipedia
 
 #+BEGIN_SRC python :session data :results replace drawer output :exports both :noweb yes :tangle data_adquisition_estados.py
-<<imports-base-fn>>
+<<includes-base-fn>>
+
 def wiki() -> pd.DataFrame:
     soup = get_soup("https://en.wikipedia.org/wiki/List_of_states_of_Mexico")
     list_of_lists = [] # :List
