@@ -1,0 +1,193 @@
+#+TITLE: Data_analysis
+
+* Imports
+#+NAME: imports
+#+BEGIN_SRC python :session data :results replace drawer output :exports both
+import pandas as pd
+from tabulate import tabulate
+from typing import Tuple, List
+
+
+def print_tabulate(df: pd.DataFrame):
+    print(tabulate(df, headers=df.columns, tablefmt='orgtbl'))
+
+#+END_SRC
+
+#+RESULTS: imports
+:results:
+:end:
+
+
+* UANL
+
+#+BEGIN_SRC python :session data :results replace drawer output :exports both :tangle uanl_analysis.py :noweb yes :eval never-export
+<<imports>>
+def analysis(file_name:str)->None:
+    df_complete = pd.read_csv(file_name)
+    df_by_dep = df.groupby("dependencia")[["Sueldo Neto"]]
+    print_tabulate(df_by_dep.mean().sort_values(by=["Sueldo Neto"], ascending=False))
+
+
+analysis("csv/uanl.csv")
+#print_tabulate(df.head(50))
+
+#+END_SRC
+
+#+RESULTS:
+:results:
+|                                                              | Sueldo Neto |
+|--------------------------------------------------------------+-------------|
+| RECTORIA                                                     |     22190.2 |
+| SECRETARIA DE DESARROLLO AGROPECUARIO                        |     19795.5 |
+| SECRETARIA DE SUSTENTABILIDAD                                |     18657.6 |
+| SRIA. DE INVESTIGACIÓN CIENTÍFICA Y DESARROLLO TECNOLÓGICO   |     18216.1 |
+| DIRECCION DEL SISTEMA DE ESTUDIOS DE POSGRADO                |     17749.6 |
+| INST. DE INVESTIGACIONES SOCIALES                            |     17660.2 |
+| FAC. DE CIENCIAS DE LA TIERRA                                |     17604.2 |
+| SECRETARIA GENERAL                                           |     16803.8 |
+| FAC. DE ING. MECANICA Y ELECTRICA                            |     16490.7 |
+| SECRETARÍA DE INNOVACIÓN Y DESARROLLO DIGITAL                |     15791.3 |
+| DIRECCION DE SERVICIO SOCIAL Y PRACTICAS PROFESIONALES       |     15693.3 |
+| DIRECCIÓN DE RELACIONES INTERNACIONALES                      |     15603.6 |
+| FAC. DE CIENCIAS BIOLOGICAS                                  |     15370.5 |
+| CENTRO DE INCUBACION DE EMPRESAS Y TRANSF. DE TECNOLOGIA     |     15064.7 |
+| CENTRO DE VINCULACION SOCIAL Y EMPRESARIAL                   |     15046.3 |
+| FAC. DE ECONOMIA                                             |     14900.2 |
+| DIRECCION GENERAL ADMINISTRATIVA                             |     14856.6 |
+| FAC. DE CIENCIAS FISICO-MATEMATICAS                          |     14843.2 |
+| OFICINA DE LA ABOGACÍA GENERAL                               |     14614.9 |
+| FAC. DE MEDICINA                                             |     14407.6 |
+| ESCUELA PREPARATORIA #15                                     |     14356.7 |
+| FACULTAD DE TRABAJO SOCIAL Y DESARROLLO HUMANO               |     14332.6 |
+| TESORERIA GENERAL                                            |     14224.9 |
+| CONTRALORIA GENERAL                                          |     14172.8 |
+| CENTRO DE ESTUDIOS Y CERTIFICACIÓN DE LENGUAS EXTRANJERAS    |     14025.4 |
+| DIRECCION GENERAL DE PLANEACION Y PROYECTOS ESTRATEGICOS     |     13999.7 |
+| FAC. DE AGRONOMIA                                            |     13866.7 |
+| FAC. DE CIENCIAS FORESTALES                                  |     13726.2 |
+| ESCUELA PREPARATORIA #17                                     |     13554.1 |
+| ESCUELA PREPARATORIA #23                                     |     13518.3 |
+| FACULTAD DE CIENCIAS POLÍTICAS Y RELACIONES INTERNACIONALES  |     13420.8 |
+| FAC. DE ENFERMERIA                                           |     13359.7 |
+| FAC. DE CIENCIAS QUIMICAS                                    |     13319.9 |
+| FAC. DE ODONTOLOGIA                                          |     13235.8 |
+| FAC. DE CIENCIAS DE LA COMUNICACION                          |     13116.9 |
+| ESCUELA PREPARATORIA #20                                     |     13098.2 |
+| ESCUELA PREPARATORIA # 9                                     |     12924.7 |
+| ESCUELA PREPARATORIA #18                                     |     12888.9 |
+| SECRETARIA ACADEMICA                                         |     12824.2 |
+| ESCUELA PREPARATORIA #24                                     |     12809.1 |
+| FAC. DE MED. VETERINARIA Y ZOOT.                             |     12624.1 |
+| ESCUELA PREPARATORIA # 2                                     |     12520.2 |
+| C.DE ESTUDIOS HUMANISTICOS                                   |     12475.2 |
+| ESCUELA PREPARATORIA # 8                                     |     12417.4 |
+| DIRECCION DE COMUNICACION INSTITUCIONAL                      |     12228.1 |
+| ESCUELA PREPARATORIA #25                                     |     12194.2 |
+| FAC. DE CONTADURIA PUBLICA Y ADMON.                          |     12167.2 |
+| FAC. DE ING. CIVIL                                           |     12037.4 |
+| ESCUELA PREPARATORIA #22                                     |     11998.8 |
+| DIRECCION DE RECURSOS HUMANOS Y NOMINAS                      |       11918 |
+| FAC. DE PSICOLOGIA                                           |     11858.6 |
+| DIRECCION DE INVESTIGACION                                   |     11765.1 |
+| FAC. DE FILOSOFIA Y LETRAS                                   |     11738.6 |
+| FAC. DE ORGANIZACION DEPORTIVA                               |     11688.5 |
+| C.DE INV.Y DES.DE ED.BILINGUE                                |     11452.8 |
+| ESCUELA PREPARATORIA # 5                                     |     11381.9 |
+| ESCUELA PREPARATORIA #14                                     |     11365.2 |
+| DIRECCION DE CONSTRUCCION Y MANTENIMIENTO                    |     11316.3 |
+| ESCUELA PREPARATORIA # 3                                     |     11307.5 |
+| ESCUELA PREPARATORIA #12                                     |       11287 |
+| SECRETARIA DE EXT.Y CULTURA                                  |     11218.3 |
+| FAC. DE ARQUITECTURA                                         |     11210.4 |
+| ESCUELA Y PREPARATORIA TECNICA MEDICA                        |     11150.9 |
+| FAC. DE ARTES VISUALES                                       |     11140.7 |
+| ESCUELA PREPARATORIA #16                                     |     11108.2 |
+| FACULTAD DE SALUD PUBLICA Y NUTRICION                        |     11101.1 |
+| FACULTAD DE DERECHO Y CRIMINOLOGIA                           |     11037.2 |
+| ESCUELA PREPARATORIA # 1                                     |     10916.5 |
+| ESCUELA PREPARATORIA #13                                     |     10705.8 |
+| ESCUELA PREPARATORIA # 7                                     |     10697.2 |
+| FAC. DE ARTES ESCENICAS                                      |     10647.2 |
+| ESCUELA PREPARATORIA # 6                                     |     10537.2 |
+| C. INNOVACION; INVEST. Y DESLLO. DE INGENIERIA Y TECNOLOGIA  |     10497.4 |
+| ESCUELA INDUSTRIAL Y PREPARATORIA TECNICA PABLO LIVAS        |       10493 |
+| AUDITORIA INTERNA DE LA U.A.N.L.                             |     10453.8 |
+| ESCUELA PREPARATORIA #10                                     |     10443.6 |
+| CTRO. DE INF. DE HISTORIA REGIONAL                           |     10442.5 |
+| ESC.IND.Y PREPA.TEC.ALVARO OBREGON                           |     10427.1 |
+| DEPARTAMENTO DE BECAS                                        |     10351.2 |
+| DIRECCION DE DEPORTES                                        |     10300.7 |
+| ESCUELA PREPARATORIA #19                                     |     10298.6 |
+| CTRO. DE INVESTIGACIÓN; INNOVACIÓN Y DESARROLLO DE LAS ARTES |     10265.8 |
+| ESCUELA PREPARATORIA #21                                     |     10232.4 |
+| FAC. DE MUSICA                                               |     10135.1 |
+| IMAGEN INSTITUCIONAL                                         |     9949.46 |
+| DIRECCION DE ACTIVIDADES ESTUDIANTILES                       |     9882.92 |
+| DIRECCION DE TECNOLOGIAS DE INFORMACION                      |     9858.19 |
+| ESCUELA PREPARATORIA # 4                                     |     9832.26 |
+| "CAPILLA ALFONSINA" BIBLIOTECA UNIVERSITARIA                 |     9740.21 |
+| DIRECCION DE BIBLIOTECAS                                     |      9639.4 |
+| CENTRO DE FOMENTO GANADERO VALLECILLO                        |     9487.21 |
+| CENTRO ACUATICO OLIMPICO UNIVERSITARIO                       |     9480.96 |
+| DIRECCION DE SERVICIOS MEDICOS                               |     9461.63 |
+| DIRECCION DE EDITORIAL UNIVERSITARIA                         |     9408.91 |
+| ORQUESTA SINFONICA                                           |     9382.17 |
+| DIRECCION DE DESARROLLO CULTURAL                             |      9364.1 |
+| CENTRO DE INVESTIGACION Y DESARROLLO EN CIENCIAS DE LA SALUD |     9264.46 |
+| CENTRO UNIVERSITARIO DE SALUD                                |     9144.36 |
+| DIRECCIÓN GENERAL DE RADIO Y TELEVISIÓN UNIVERSITARIA        |     9007.25 |
+| DIRECCION DEL PROGRAMA DE FUTBOL AMERICANO                   |     8645.48 |
+| CENTRO DE ACONDICIONAMIENTO FISICO MAGISTERIAL               |     8544.14 |
+| DIRECCION DE PREVENCION Y PROTECCION UNIVERSITARIA           |     8406.05 |
+| DEPARTAMENTO ESCOLAR Y DE ARCHIVO                            |     8340.58 |
+| ESCUELA PREPARATORIA #11                                     |     8274.38 |
+| GIMNASIO DE AREA MEDICA                                      |     8207.07 |
+| TEATRO UNIVERSITARIO                                         |     7914.53 |
+| DEPTO. DE PERSONAL                                           |     7851.96 |
+| LIBRERIA UNIVERSITARIA                                       |     7773.63 |
+| CENTRO DE INVESTIGACION EN PRODUCCION AGROPECUARIA           |     7759.96 |
+| DIRECCION DE SERVICIOS GENERALES                             |     7694.39 |
+| JUNTA DE GOBIERNO                                            |     7515.42 |
+| HOSPITAL UNIVERSITARIO                                       |     7107.18 |
+| CENTRO DE EVALUACIONES                                       |     7073.78 |
+| IMPRENTA UNIVERSITARIA                                       |     6613.39 |
+:end:
+* Estados
+
+#+BEGIN_SRC python :session data :results replace drawer output :exports both :tangle estados_analysis.py :noweb yes :eval never-export
+<<imports>>
+def analysis(file_name:str)->pd.DataFrame:
+    df = pd.read_csv(file_name)
+    df["hab_x_km2"] = df["poblacion_2020"] / df["area_km"]
+    df["hab_x_mi"] = df["poblacion_2020"] / df["area_mi"]
+    print(sum(df["poblacion_2020"]))
+    return df
+df = analysis("csv/estados_limpio.csv")
+print_tabulate(df.head())
+print_tabulate(df.describe())
+print(df["poblacion_2020"].sum())
+
+#+END_SRC
+
+#+RESULTS:
+:results:
+126014024.0
+|    | estado              | nombre_oficial      | capital                   | ciudad_mas_grande         |   poblacion_2020 |   num_de_municipios |   lugar | fecha_de_admision   |   area_km |   area_mi |   hab_x_km2 |   hab_x_mi |
+|----+---------------------+---------------------+---------------------------+---------------------------+------------------+---------------------+---------+---------------------+-----------+-----------+-------------+------------|
+|  0 | Aguascalientes      | Aguascalientes      | Aguascalientes            | Aguascalientes            |      1.42561e+06 |                  11 |      24 | 1857-02-05          |    5615.7 |    2168.2 |    253.861  |   657.507  |
+|  1 | Baja California     | Baja California     | Mexicali                  | Tijuana                   |      3.76902e+06 |                   6 |      29 | 1952-01-16          |   71450   |   27587   |     52.7505 |   136.623  |
+|  2 | Baja California Sur | Baja California Sur | La Paz                    | La Paz                    | 798447           |                   5 |      31 | 1974-10-08          |   73909.4 |   28536.6 |     10.8031 |    27.9798 |
+|  3 | Campeche            | Campeche            | San Francisco de Campeche | San Francisco de Campeche | 928363           |                  13 |      25 | 1863-04-29          |   57484.9 |   22195   |     16.1497 |    41.8276 |
+|  4 | Chiapas             | Chiapas             | Tuxtla Gutiérrez          | Tuxtla Gutiérrez          |      5.54383e+06 |                 124 |      19 | 1824-09-14          |   73311   |   28305.5 |     75.6207 |   195.857  |
+|       |   poblacion_2020 |   num_de_municipios |    lugar |   area_km |   area_mi |   hab_x_km2 |   hab_x_mi |
+|-------+------------------+---------------------+----------+-----------+-----------+-------------+------------|
+| count |     32           |             32      | 32       |      32   |     32    |     32      |    32      |
+| mean  |      3.93794e+06 |             77.1875 | 16.5     |   61270.2 |  23656.6  |    309.679  |   802.022  |
+| std   |      3.27801e+06 |            105.268  |  9.38083 |   53819   |  20779.6  |   1078.71   |  2793.61   |
+| min   | 731391           |              5      |  1       |    1494.3 |    577    |     10.8031 |    27.9798 |
+| 25%   |      1.85165e+06 |             17.75   |  8.75    |   24136.1 |   9319.05 |     43.36   |   112.302  |
+| 50%   |      3.05489e+06 |             48.5    | 16.5     |   58041.8 |  22410    |     67.1707 |   173.971  |
+| 75%   |      4.94759e+06 |             89.5    | 24.25    |   74250.9 |  28668.4  |    159.016  |   411.848  |
+| max   |      1.69924e+07 |            570      | 32       |  247413   |  95526.5  |   6163.38   | 15961.8    |
+126014024.0
+:end:

@@ -20,7 +20,7 @@
 ** Data acquisition
 #+ATTR_REVEAL: :frag fade
 - Extract-Transform-Load
-    #+begin_src ditaa :file etl.png :cmdline -r -E -T -s 2
+    #+begin_src ditaa :file etl.png :cmdline -r -E -T -s 2 :exports results
   +-----------------+
   : +----------+    |
   | |{s}       |    |
@@ -41,7 +41,9 @@
     +----------+
 
     #+end_src
-   
+
+    #+RESULTS:
+
 ** Data storage
 - DB
 - Files
