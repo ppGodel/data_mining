@@ -1,5 +1,26 @@
 #+TITLE: Data_analysis
 
+Estadistica descriptiva a los datos por medio de funciones de agregacion, es importate saber un poco de algebra relacional.
+
+ + Funciones de agregación
+   - min
+   - max
+   - media
+   - moda
+   - conteo
+   - sumatoria
+   - kutosis
+   - variaza
+   - desviacion estándar
+ + Algebra relacional
+   - transposicion
+   - selección
+   - proyección
+   - uniones
+   - joins
+   - agrupación
+
+
 * Imports
 #+NAME: imports
 #+BEGIN_SRC python :session data :results replace drawer output :exports both
@@ -20,13 +41,32 @@ def print_tabulate(df: pd.DataFrame):
 
 * UANL
 
+
 #+BEGIN_SRC python :session data :results replace drawer output :exports both :tangle uanl_analysis.py :noweb yes :eval never-export
 <<imports>>
 def analysis(file_name:str)->None:
     df_complete = pd.read_csv(file_name)
-    df_by_dep = df.groupby("dependencia")[["Sueldo Neto"]]
-    print_tabulate(df_by_dep.min().sort_values(by=["Sueldo Neto"], ascending=False))
+    df_complete["Fecha"] = pd.to_datetime(df_complete["anio"].map(str)+ "-" + df_complete["mes"].map(str), format="%Y-%m")
+    df_complete = df_complete.drop(['anio', 'mes'], axis=1)
+    df_by_dep = df_complete.groupby(["dependencia", "Fecha"])[["Sueldo Neto"]].aggregate(sum)
+    # df_by_dep_by_anio = df_by_dep.groupby(["dependencia","anio"]).aggregate(pd.DataFrame.sum).sort_values(by=["dependencia", "anio"], ascending=True)
+    df_by_dep.reset_index(inplace=True)
+    df_by_dep.set_index("Fecha", inplace=True)
+    print_tabulate(df_by_dep.head())
 
+    # for dep in set(df_by_dep["dependencia"]):
+    #     plot_by_dep(df_by_dep, dep)
+    # df_by_dep.groupby("dependencia")["Sueldo Neto"].plot(y = ["Sueldo Neto"])
+    # plt.savefig("img/foo.png")# , bbox_inches='tight')
+
+    df_by_dep.boxplot(by ='dependencia')
+    plt.savefig("img/boxplot.png")# , bbox_inches='tight')
+
+def plot_by_dep(df: pd.DataFrame, dep:str)->None:
+    df[df["dependencia"] == dep].plot(y =["Sueldo Neto"])
+    plt.savefig(f"img/lt_{dep}.png")
+    df[df["dependencia"] == dep].boxplot(by ='dependencia')
+    plt.savefig(f"img/bplt_{dep}.png")
 
 analysis("csv/uanl.csv")
 #print_tabulate(df.head(50))
@@ -35,123 +75,19 @@ analysis("csv/uanl.csv")
 
 #+RESULTS:
 :results:
-|                                                              | Sueldo Neto |
-|--------------------------------------------------------------+-------------|
-| C.DE ESTUDIOS HUMANISTICOS                                   |     7836.18 |
-| CENTRO DE ESTUDIOS Y CERTIFICACIÓN DE LENGUAS EXTRANJERAS    |     7391.17 |
-| CENTRO DE INCUBACION DE EMPRESAS Y TRANSF. DE TECNOLOGIA     |     7391.17 |
-| RECTORIA                                                     |     5684.31 |
-| CTRO. DE INF. DE HISTORIA REGIONAL                           |     5436.23 |
-| DIRECCION DEL SISTEMA DE ESTUDIOS DE POSGRADO                |      5364.5 |
-| JUNTA DE GOBIERNO                                            |     5313.54 |
-| SECRETARIA DE DESARROLLO AGROPECUARIO                        |     5153.42 |
-| INST. DE INVESTIGACIONES SOCIALES                            |     5111.94 |
-| C. INNOVACION; INVEST. Y DESLLO. DE INGENIERIA Y TECNOLOGIA  |      5045.3 |
-| DIRECCION DE INVESTIGACION                                   |     4921.82 |
-| SRIA. DE INVESTIGACIÓN CIENTÍFICA Y DESARROLLO TECNOLÓGICO   |     4753.34 |
-| DIRECCION DE DESARROLLO CULTURAL                             |     4702.02 |
-| DIRECCION GENERAL DE PLANEACION Y PROYECTOS ESTRATEGICOS     |      4638.6 |
-| DIRECCION DE EDITORIAL UNIVERSITARIA                         |     4634.34 |
-| SECRETARIA DE SUSTENTABILIDAD                                |     4634.34 |
-| CTRO. DE INVESTIGACIÓN; INNOVACIÓN Y DESARROLLO DE LAS ARTES |     4634.34 |
-| CENTRO DE INVESTIGACION Y DESARROLLO EN CIENCIAS DE LA SALUD |     4634.32 |
-| DIRECCION GENERAL ADMINISTRATIVA                             |     4538.47 |
-| C.DE INV.Y DES.DE ED.BILINGUE                                |     4538.47 |
-| ESCUELA PREPARATORIA #14                                     |     4402.94 |
-| OFICINA DE LA ABOGACÍA GENERAL                               |     4311.07 |
-| IMPRENTA UNIVERSITARIA                                       |     3941.72 |
-| SECRETARIA GENERAL                                           |     3925.79 |
-| CONTRALORIA GENERAL                                          |     3896.01 |
-| ESCUELA PREPARATORIA # 6                                     |     3744.03 |
-| ORQUESTA SINFONICA                                           |     3706.11 |
-| CENTRO DE ACONDICIONAMIENTO FISICO MAGISTERIAL               |     3430.14 |
-| LIBRERIA UNIVERSITARIA                                       |     3370.08 |
-| CENTRO DE INVESTIGACION EN PRODUCCION AGROPECUARIA           |     3357.98 |
-| SECRETARÍA DE INNOVACIÓN Y DESARROLLO DIGITAL                |     2943.86 |
-| DIRECCIÓN DE RELACIONES INTERNACIONALES                      |     2897.66 |
-| TESORERIA GENERAL                                            |     2809.47 |
-| CENTRO DE VINCULACION SOCIAL Y EMPRESARIAL                   |     2809.47 |
-| SECRETARIA DE EXT.Y CULTURA                                  |     2731.28 |
-| DIRECCION DE ACTIVIDADES ESTUDIANTILES                       |     2699.14 |
-| AUDITORIA INTERNA DE LA U.A.N.L.                             |      2694.8 |
-| IMAGEN INSTITUCIONAL                                         |      2694.8 |
-| "CAPILLA ALFONSINA" BIBLIOTECA UNIVERSITARIA                 |      2694.8 |
-| ESCUELA PREPARATORIA #24                                     |     2671.05 |
-| ESCUELA PREPARATORIA #20                                     |     2619.93 |
-| DIRECCION DE PREVENCION Y PROTECCION UNIVERSITARIA           |     2618.34 |
-| ESCUELA PREPARATORIA #23                                     |     2612.24 |
-| TEATRO UNIVERSITARIO                                         |     2611.44 |
-| DIRECCION DE SERVICIOS GENERALES                             |     2597.12 |
-| ESCUELA PREPARATORIA #11                                     |     2549.62 |
-| DIRECCION DE RECURSOS HUMANOS Y NOMINAS                      |     2515.14 |
-| FAC. DE CIENCIAS DE LA TIERRA                                |     2416.27 |
-| ESCUELA PREPARATORIA #17                                     |     2345.05 |
-| DIRECCION DE TECNOLOGIAS DE INFORMACION                      |     2218.23 |
-| FAC. DE ECONOMIA                                             |     2123.36 |
-| DIRECCION DE SERVICIO SOCIAL Y PRACTICAS PROFESIONALES       |     2011.98 |
-| ESCUELA PREPARATORIA #19                                     |     2007.52 |
-| ESCUELA PREPARATORIA # 9                                     |     2001.46 |
-| CENTRO UNIVERSITARIO DE SALUD                                |     1964.87 |
-| CENTRO DE FOMENTO GANADERO VALLECILLO                        |      1934.2 |
-| DEPTO. DE PERSONAL                                           |     1868.27 |
-| ESCUELA PREPARATORIA #13                                     |     1864.26 |
-| ESCUELA PREPARATORIA #12                                     |     1835.96 |
-| ESCUELA PREPARATORIA #18                                     |     1786.85 |
-| ESCUELA PREPARATORIA # 8                                     |     1770.52 |
-| ESCUELA PREPARATORIA #16                                     |     1713.87 |
-| DIRECCION DEL PROGRAMA DE FUTBOL AMERICANO                   |     1570.51 |
-| FAC. DE ARTES VISUALES                                       |     1563.48 |
-| GIMNASIO DE AREA MEDICA                                      |     1384.96 |
-| CENTRO DE EVALUACIONES                                       |     1299.26 |
-| ESCUELA PREPARATORIA # 4                                     |     1290.48 |
-| FAC. DE ARTES ESCENICAS                                      |        1252 |
-| ESCUELA PREPARATORIA #10                                     |      1217.2 |
-| CENTRO ACUATICO OLIMPICO UNIVERSITARIO                       |     1100.22 |
-| ESCUELA PREPARATORIA # 2                                     |     1094.07 |
-| ESCUELA PREPARATORIA # 1                                     |     1094.07 |
-| FAC. DE MEDICINA                                             |     1061.68 |
-| FAC. DE ORGANIZACION DEPORTIVA                               |     1053.91 |
-| DEPARTAMENTO DE BECAS                                        |     1039.07 |
-| DIRECCION DE BIBLIOTECAS                                     |     1015.33 |
-| DIRECCION DE COMUNICACION INSTITUCIONAL                      |      928.04 |
-| ESCUELA PREPARATORIA # 3                                     |      911.73 |
-| FAC. DE ENFERMERIA                                           |      877.45 |
-| FAC. DE PSICOLOGIA                                           |      875.31 |
-| DIRECCION DE CONSTRUCCION Y MANTENIMIENTO                    |      800.85 |
-| FAC. DE CIENCIAS DE LA COMUNICACION                          |      746.42 |
-| FAC. DE FILOSOFIA Y LETRAS                                   |      739.12 |
-| FAC. DE ING. CIVIL                                           |      729.38 |
-| ESCUELA PREPARATORIA #22                                     |      714.28 |
-| FAC. DE CONTADURIA PUBLICA Y ADMON.                          |      711.07 |
-| DEPARTAMENTO ESCOLAR Y DE ARCHIVO                            |      705.27 |
-| ESCUELA PREPARATORIA #15                                     |      698.05 |
-| FAC. DE ODONTOLOGIA                                          |      697.96 |
-| FACULTAD DE TRABAJO SOCIAL Y DESARROLLO HUMANO               |       658.1 |
-| ESCUELA PREPARATORIA #25                                     |       637.4 |
-| ESCUELA INDUSTRIAL Y PREPARATORIA TECNICA PABLO LIVAS        |      609.53 |
-| SECRETARIA ACADEMICA                                         |      583.16 |
-| FACULTAD DE CIENCIAS POLÍTICAS Y RELACIONES INTERNACIONALES  |      572.91 |
-| FAC. DE CIENCIAS FORESTALES                                  |      559.82 |
-| FACULTAD DE SALUD PUBLICA Y NUTRICION                        |      547.04 |
-| FAC. DE ING. MECANICA Y ELECTRICA                            |      547.04 |
-| FAC. DE CIENCIAS QUIMICAS                                    |      547.04 |
-| ESCUELA PREPARATORIA # 7                                     |      409.32 |
-| DIRECCIÓN GENERAL DE RADIO Y TELEVISIÓN UNIVERSITARIA        |      407.16 |
-| FAC. DE CIENCIAS FISICO-MATEMATICAS                          |      390.87 |
-| ESCUELA PREPARATORIA #21                                     |      388.77 |
-| FAC. DE AGRONOMIA                                            |      381.94 |
-| FACULTAD DE DERECHO Y CRIMINOLOGIA                           |      364.69 |
-| ESCUELA PREPARATORIA # 5                                     |      350.98 |
-| FAC. DE MUSICA                                               |      350.63 |
-| DIRECCION DE DEPORTES                                        |      343.25 |
-| ESCUELA Y PREPARATORIA TECNICA MEDICA                        |      294.44 |
-| FAC. DE MED. VETERINARIA Y ZOOT.                             |      291.75 |
-| ESC.IND.Y PREPA.TEC.ALVARO OBREGON                           |      256.14 |
-| FAC. DE ARQUITECTURA                                         |      223.93 |
-| DIRECCION DE SERVICIOS MEDICOS                               |       177.2 |
-| FAC. DE CIENCIAS BIOLOGICAS                                  |       177.2 |
-| HOSPITAL UNIVERSITARIO                                       |      175.41 |
+|                     | dependencia                                  | Sueldo Neto |
+|---------------------+----------------------------------------------+-------------|
+| 2019-12-01 00:00:00 | "CAPILLA ALFONSINA" BIBLIOTECA UNIVERSITARIA |      518869 |
+| 2020-01-01 00:00:00 | "CAPILLA ALFONSINA" BIBLIOTECA UNIVERSITARIA |      528440 |
+| 2020-02-01 00:00:00 | "CAPILLA ALFONSINA" BIBLIOTECA UNIVERSITARIA |      567098 |
+| 2020-03-01 00:00:00 | "CAPILLA ALFONSINA" BIBLIOTECA UNIVERSITARIA |      570808 |
+| 2020-04-01 00:00:00 | "CAPILLA ALFONSINA" BIBLIOTECA UNIVERSITARIA |      586530 |
 :end:
+
+[[file:img/foo.png]]
+
+[[file:img/boxplot.png]]
+
 * Estados
 
 #+BEGIN_SRC python :session data :results replace drawer output :exports both :tangle estados_analysis.py :noweb yes :eval never-export
