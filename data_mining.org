@@ -26,13 +26,11 @@
 5) Data Visualization
 6) Statistic Test
 7) Linear Models
-8) Multiple regression
-9) ANOVA
-10) Forecasting
-11) Data classification
-12) Data clustering
-13) Text analysis
-14) Image anayisis
+8) Forecasting
+9) Data classification
+10) Data clustering
+11) Text analysis
+12) Image anayisis
 ** Score
 - 10 Practices
 ** Tools

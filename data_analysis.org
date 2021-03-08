@@ -46,23 +46,52 @@ def print_tabulate(df: pd.DataFrame):
 <<imports>>
 import matplotlib.pyplot as plt
 
+def categorize(name:str)->str:
+    if 'PREPARATORIA' in name or 'PREPA.' in name:
+        return 'PREPARATORIA'
+    if 'FACULTAD' in name or 'FAC.' in name:
+        return 'FACULTAD'
+    if 'HOSPITAL' in name:
+        return 'HOSPITAL'
+    if 'CENTRO' in name or 'CTRO.' in name or 'C.' in name or 'INVESTIGAC' in name :
+        return 'CENTRO'
+    if 'SECRETARÍA' in name or 'SECRETARIA' in name or 'SRIA.' in name or 'DIRECCIÓN' in name or 'DIRECCION' in name or \
+       'DEPARTAMENTO' in name or 'DEPTO.' in name or 'CONTRALORIA' in name or 'AUDITORIA' in name or 'TESORERIA' in name \
+       or 'ESCOLAR' in name or 'ABOGACÍA' in name  or 'JUNTA' in name  or 'RECTORIA' in name  or 'IMAGEN' in name :
+        return 'ADMIN'
+    return 'OTRO'
+
+
 def analysis(file_name:str)->None:
     df_complete = pd.read_csv(file_name)
     df_complete["Fecha"] = pd.to_datetime(df_complete["anio"].map(str)+ "-" + df_complete["mes"].map(str), format="%Y-%m")
     df_complete = df_complete.drop(['anio', 'mes'], axis=1)
+    df_complete["Tipo"] = df_complete["dependencia"].map(categorize)
+    # print_tabulate(df_complete[["dependencia","Tipo"]].drop_duplicates().head(150))
     df_by_dep = df_complete.groupby(["dependencia", "Fecha"])[["Sueldo Neto"]].aggregate(pd.DataFrame.sum)
+    df_by_type = df_complete.groupby(["Tipo", "Fecha"])[["Sueldo Neto"]].aggregate(pd.DataFrame.sum)
+
     # df_by_dep_by_anio = df_by_dep.groupby(["dependencia","anio"]).aggregate(pd.DataFrame.sum).sort_values(by=["dependencia", "anio"], ascending=True)
     df_by_dep.reset_index(inplace=True)
-    # df_by_dep.set_index("Fecha", inplace=True)
-    print_tabulate(df_by_dep.head(50))
+    df_by_dep.set_index("Fecha", inplace=True)
+    print_tabulate(df_by_dep.head(5))
 
     # for dep in set(df_by_dep["dependencia"]):
     #     plot_by_dep(df_by_dep, dep)
-    # df_by_dep.groupby("dependencia")["Sueldo Neto"].plot(y = ["Sueldo Neto"])
-    # plt.savefig("img/foo.png")# , bbox_inches='tight')
+    df_aux = df_complete.groupby(["Fecha","dependencia"])[['Sueldo Neto']].sum().unstack()
+    df_aux.plot(y = 'Sueldo Neto', legend=False)
+    plt.xticks(rotation=90)
+    plt.savefig("img/foo.png")
+    plt.close()
 
-    df_by_dep.boxplot(by ='dependencia')
-    plt.savefig("img/boxplot.png")# , bbox_inches='tight')
+    df_by_type.boxplot(by = 'Tipo')
+    plt.xticks(rotation=90)
+    plt.savefig("img/boxplot_tipo.png")
+    plt.close()
+    # df_by_dep.boxplot(by ='dependencia', figsize=(32,18))
+    # plt.xticks(rotation=90)
+    # plt.savefig("img/boxplot.png")# , bbox_inches='tight')
+    # plt.close()
 
 def plot_by_dep(df: pd.DataFrame, dep:str)->None:
     df[df["dependencia"] == dep].plot(y =["Sueldo Neto"])
@@ -77,58 +106,13 @@ analysis("csv/uanl.csv")
 
 #+RESULTS:
 :results:
-|    | dependencia                                                 | Fecha               | Sueldo Neto |
-|----+-------------------------------------------------------------+---------------------+-------------|
-|  0 | "CAPILLA ALFONSINA" BIBLIOTECA UNIVERSITARIA                | 2019-12-01 00:00:00 |      518869 |
-|  1 | "CAPILLA ALFONSINA" BIBLIOTECA UNIVERSITARIA                | 2020-01-01 00:00:00 |      528440 |
-|  2 | "CAPILLA ALFONSINA" BIBLIOTECA UNIVERSITARIA                | 2020-02-01 00:00:00 |      567098 |
-|  3 | "CAPILLA ALFONSINA" BIBLIOTECA UNIVERSITARIA                | 2020-03-01 00:00:00 |      570808 |
-|  4 | "CAPILLA ALFONSINA" BIBLIOTECA UNIVERSITARIA                | 2020-04-01 00:00:00 |      586530 |
-|  5 | "CAPILLA ALFONSINA" BIBLIOTECA UNIVERSITARIA                | 2020-05-01 00:00:00 |      541917 |
-|  6 | "CAPILLA ALFONSINA" BIBLIOTECA UNIVERSITARIA                | 2020-06-01 00:00:00 |      488611 |
-|  7 | "CAPILLA ALFONSINA" BIBLIOTECA UNIVERSITARIA                | 2020-07-01 00:00:00 |      537647 |
-|  8 | "CAPILLA ALFONSINA" BIBLIOTECA UNIVERSITARIA                | 2020-08-01 00:00:00 |      539956 |
-|  9 | "CAPILLA ALFONSINA" BIBLIOTECA UNIVERSITARIA                | 2020-09-01 00:00:00 |      530942 |
-| 10 | "CAPILLA ALFONSINA" BIBLIOTECA UNIVERSITARIA                | 2020-10-01 00:00:00 |      534471 |
-| 11 | "CAPILLA ALFONSINA" BIBLIOTECA UNIVERSITARIA                | 2020-11-01 00:00:00 |      522213 |
-| 12 | AUDITORIA INTERNA DE LA U.A.N.L.                            | 2019-12-01 00:00:00 |      522851 |
-| 13 | AUDITORIA INTERNA DE LA U.A.N.L.                            | 2020-01-01 00:00:00 |      538866 |
-| 14 | AUDITORIA INTERNA DE LA U.A.N.L.                            | 2020-02-01 00:00:00 |      566887 |
-| 15 | AUDITORIA INTERNA DE LA U.A.N.L.                            | 2020-03-01 00:00:00 |      559181 |
-| 16 | AUDITORIA INTERNA DE LA U.A.N.L.                            | 2020-04-01 00:00:00 |      561757 |
-| 17 | AUDITORIA INTERNA DE LA U.A.N.L.                            | 2020-05-01 00:00:00 |      561688 |
-| 18 | AUDITORIA INTERNA DE LA U.A.N.L.                            | 2020-06-01 00:00:00 |      509125 |
-| 19 | AUDITORIA INTERNA DE LA U.A.N.L.                            | 2020-07-01 00:00:00 |      573090 |
-| 20 | AUDITORIA INTERNA DE LA U.A.N.L.                            | 2020-08-01 00:00:00 |      597668 |
-| 21 | AUDITORIA INTERNA DE LA U.A.N.L.                            | 2020-09-01 00:00:00 |      597146 |
-| 22 | AUDITORIA INTERNA DE LA U.A.N.L.                            | 2020-10-01 00:00:00 |      597668 |
-| 23 | AUDITORIA INTERNA DE LA U.A.N.L.                            | 2020-11-01 00:00:00 |      588164 |
-| 24 | C. INNOVACION; INVEST. Y DESLLO. DE INGENIERIA Y TECNOLOGIA | 2019-12-01 00:00:00 |     78995.3 |
-| 25 | C. INNOVACION; INVEST. Y DESLLO. DE INGENIERIA Y TECNOLOGIA | 2020-01-01 00:00:00 |     83088.7 |
-| 26 | C. INNOVACION; INVEST. Y DESLLO. DE INGENIERIA Y TECNOLOGIA | 2020-02-01 00:00:00 |     83135.8 |
-| 27 | C. INNOVACION; INVEST. Y DESLLO. DE INGENIERIA Y TECNOLOGIA | 2020-03-01 00:00:00 |     83561.8 |
-| 28 | C. INNOVACION; INVEST. Y DESLLO. DE INGENIERIA Y TECNOLOGIA | 2020-04-01 00:00:00 |     85095.4 |
-| 29 | C. INNOVACION; INVEST. Y DESLLO. DE INGENIERIA Y TECNOLOGIA | 2020-05-01 00:00:00 |     77881.7 |
-| 30 | C. INNOVACION; INVEST. Y DESLLO. DE INGENIERIA Y TECNOLOGIA | 2020-06-01 00:00:00 |     75847.6 |
-| 31 | C. INNOVACION; INVEST. Y DESLLO. DE INGENIERIA Y TECNOLOGIA | 2020-07-01 00:00:00 |       82585 |
-| 32 | C. INNOVACION; INVEST. Y DESLLO. DE INGENIERIA Y TECNOLOGIA | 2020-08-01 00:00:00 |     90114.1 |
-| 33 | C. INNOVACION; INVEST. Y DESLLO. DE INGENIERIA Y TECNOLOGIA | 2020-09-01 00:00:00 |     89665.7 |
-| 34 | C. INNOVACION; INVEST. Y DESLLO. DE INGENIERIA Y TECNOLOGIA | 2020-10-01 00:00:00 |     90114.1 |
-| 35 | C. INNOVACION; INVEST. Y DESLLO. DE INGENIERIA Y TECNOLOGIA | 2020-11-01 00:00:00 |     87664.6 |
-| 36 | C.DE ESTUDIOS HUMANISTICOS                                  | 2019-12-01 00:00:00 |       54786 |
-| 37 | C.DE ESTUDIOS HUMANISTICOS                                  | 2020-01-01 00:00:00 |       54788 |
-| 38 | C.DE ESTUDIOS HUMANISTICOS                                  | 2020-02-01 00:00:00 |     54926.9 |
-| 39 | C.DE ESTUDIOS HUMANISTICOS                                  | 2020-03-01 00:00:00 |     55655.4 |
-| 40 | C.DE ESTUDIOS HUMANISTICOS                                  | 2020-04-01 00:00:00 |     56277.4 |
-| 41 | C.DE ESTUDIOS HUMANISTICOS                                  | 2020-05-01 00:00:00 |     57396.2 |
-| 42 | C.DE ESTUDIOS HUMANISTICOS                                  | 2020-06-01 00:00:00 |     52422.8 |
-| 43 | C.DE ESTUDIOS HUMANISTICOS                                  | 2020-07-01 00:00:00 |     57396.2 |
-| 44 | C.DE ESTUDIOS HUMANISTICOS                                  | 2020-08-01 00:00:00 |     87681.8 |
-| 45 | C.DE ESTUDIOS HUMANISTICOS                                  | 2020-09-01 00:00:00 |     90779.9 |
-| 46 | C.DE ESTUDIOS HUMANISTICOS                                  | 2020-10-01 00:00:00 |       89304 |
-| 47 | C.DE ESTUDIOS HUMANISTICOS                                  | 2020-11-01 00:00:00 |     86996.9 |
-| 48 | C.DE INV.Y DES.DE ED.BILINGUE                               | 2019-12-01 00:00:00 |      547029 |
-| 49 | C.DE INV.Y DES.DE ED.BILINGUE                               | 2020-01-01 00:00:00 |      467850 |
+|                     | dependencia                                  | Sueldo Neto |
+|---------------------+----------------------------------------------+-------------|
+| 2019-12-01 00:00:00 | "CAPILLA ALFONSINA" BIBLIOTECA UNIVERSITARIA |      518869 |
+| 2020-01-01 00:00:00 | "CAPILLA ALFONSINA" BIBLIOTECA UNIVERSITARIA |      528440 |
+| 2020-02-01 00:00:00 | "CAPILLA ALFONSINA" BIBLIOTECA UNIVERSITARIA |      567098 |
+| 2020-03-01 00:00:00 | "CAPILLA ALFONSINA" BIBLIOTECA UNIVERSITARIA |      570808 |
+| 2020-04-01 00:00:00 | "CAPILLA ALFONSINA" BIBLIOTECA UNIVERSITARIA |      586530 |
 :end:
 
 [[file:img/foo.png]]
