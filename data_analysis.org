@@ -36,6 +36,10 @@ def print_tabulate(df: pd.DataFrame):
 
 #+RESULTS: imports
 :results:
+Python 3.7.10 (default, Feb 17 2021, 00:06:19)
+[GCC 10.2.1 20201125 (Red Hat 10.2.1-9)] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+>>> python.el: native completion setup loaded
 :end:
 
 
@@ -45,6 +49,8 @@ def print_tabulate(df: pd.DataFrame):
 #+BEGIN_SRC python :session data :results replace drawer output :exports both :tangle uanl_analysis.py :noweb yes :eval never-export
 <<imports>>
 import matplotlib.pyplot as plt
+import statsmodels.api as sm
+from statsmodels.formula.api import ols
 
 def categorize(name:str)->str:
     if 'PREPARATORIA' in name or 'PREPA.' in name:
@@ -69,7 +75,7 @@ def analysis(file_name:str)->None:
     df_complete["Tipo"] = df_complete["dependencia"].map(categorize)
     # print_tabulate(df_complete[["dependencia","Tipo"]].drop_duplicates().head(150))
     df_by_dep = df_complete.groupby(["dependencia", "Fecha"])[["Sueldo Neto"]].aggregate(pd.DataFrame.sum)
-    df_by_type = df_complete.groupby(["Tipo", "Fecha"])[["Sueldo Neto"]].aggregate(pd.DataFrame.sum)
+    df_by_type = df_complete.groupby(["Tipo", "Fecha"])[["Sueldo Neto"]].aggregate(pd.DataFrame.sum)# .count()
 
     # df_by_dep_by_anio = df_by_dep.groupby(["dependencia","anio"]).aggregate(pd.DataFrame.sum).sort_values(by=["dependencia", "anio"], ascending=True)
     df_by_dep.reset_index(inplace=True)
@@ -77,17 +83,32 @@ def analysis(file_name:str)->None:
     print_tabulate(df_by_dep.head(5))
 
     # for dep in set(df_by_dep["dependencia"]):
-    #     plot_by_dep(df_by_dep, dep)
+    #    plot_by_dep(df_by_dep, dep)
     df_aux = df_complete.groupby(["Fecha","dependencia"])[['Sueldo Neto']].sum().unstack()
-    df_aux.plot(y = 'Sueldo Neto', legend=False)
+    df_aux.plot(y = 'Sueldo Neto', legend=False, figsize=(32,18))
     plt.xticks(rotation=90)
     plt.savefig("img/foo.png")
     plt.close()
 
-    df_by_type.boxplot(by = 'Tipo')
+    df_by_type.boxplot(by = 'Tipo', figsize=(18,9))
     plt.xticks(rotation=90)
     plt.savefig("img/boxplot_tipo.png")
     plt.close()
+
+    # aux = df_complete.groupby(["Tipo"])[["Sueldo Neto"]].aggregate(pd.DataFrame.sum)
+    # aux.reset_index(inplace=True)
+    df_by_type.reset_index(inplace=True)
+    df_aux = df_by_type.rename(columns={"Sueldo Neto": "GastoSalarios"}).drop(['Fecha'], axis=1)
+    # print(df_aux)
+    modl = ols("GastoSalarios ~ Tipo", data=df_aux).fit()
+    anova_df = sm.stats.anova_lm(modl, typ=2)
+    if anova_df["PR(>F)"][0] < 0.05:
+        print("hay diferencias")
+    else:
+        print("No hay diferencias")
+
+
+
     # df_by_dep.boxplot(by ='dependencia', figsize=(32,18))
     # plt.xticks(rotation=90)
     # plt.savefig("img/boxplot.png")# , bbox_inches='tight')
@@ -113,6 +134,7 @@ analysis("csv/uanl.csv")
 | 2020-02-01 00:00:00 | "CAPILLA ALFONSINA" BIBLIOTECA UNIVERSITARIA |      567098 |
 | 2020-03-01 00:00:00 | "CAPILLA ALFONSINA" BIBLIOTECA UNIVERSITARIA |      570808 |
 | 2020-04-01 00:00:00 | "CAPILLA ALFONSINA" BIBLIOTECA UNIVERSITARIA |      586530 |
+hay diferencias
 :end:
 
 [[file:img/foo.png]]
