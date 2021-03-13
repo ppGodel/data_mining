@@ -96,11 +96,16 @@ def analysis(file_name:str)->None:
     df_by_type.reset_index(inplace=True)
     df_aux = df_by_type.rename(columns={"Sueldo Neto": "GastoSalarios"}).drop(['Fecha'], axis=1)
     # print(df_aux)
+
+    # shaphiro-wills
+    # Levenes or barletts
     modl = ols("GastoSalarios ~ Tipo", data=df_aux).fit()
     anova_df = sm.stats.anova_lm(modl, typ=2)
-    if anova_df["PR(>F)"][0] < 0.05:
+    if anova_df["PR(>F)"][0] < 0.005:
         print("hay diferencias")
         print(anova_df)
+        # Prueba tukey
+        # imprimir los resultados
     else:
         print("No hay diferencias")
 
@@ -132,6 +137,9 @@ analysis("csv/uanl.csv")
 | 2020-03-01 00:00:00 | "CAPILLA ALFONSINA" BIBLIOTECA UNIVERSITARIA |      570808 |
 | 2020-04-01 00:00:00 | "CAPILLA ALFONSINA" BIBLIOTECA UNIVERSITARIA |      586530 |
 hay diferencias
+                sum_sq    df            F        PR(>F)
+Tipo      4.496036e+16   5.0  1518.732848  1.093663e-66
+Residual  3.907710e+14  66.0          NaN           NaN
 :end:
 
 [[file:img/foo.png]]
