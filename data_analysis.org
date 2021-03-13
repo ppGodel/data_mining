@@ -36,10 +36,6 @@ def print_tabulate(df: pd.DataFrame):
 
 #+RESULTS: imports
 :results:
-Python 3.7.10 (default, Feb 17 2021, 00:06:19)
-[GCC 10.2.1 20201125 (Red Hat 10.2.1-9)] on linux
-Type "help", "copyright", "credits" or "license" for more information.
->>> python.el: native completion setup loaded
 :end:
 
 
@@ -104,6 +100,7 @@ def analysis(file_name:str)->None:
     anova_df = sm.stats.anova_lm(modl, typ=2)
     if anova_df["PR(>F)"][0] < 0.05:
         print("hay diferencias")
+        print(anova_df)
     else:
         print("No hay diferencias")
 
