@@ -10,7 +10,7 @@ import pandas as pd
 from tabulate import tabulate
 from typing import Tuple, List
 import re
-import datetime
+from datetime import datetime
 
 def get_soup(url: str) -> BeautifulSoup:
     response = requests.get(url)
