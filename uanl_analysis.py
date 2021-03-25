@@ -9,80 +9,36 @@ def print_tabulate(df: pd.DataFrame):
 import matplotlib.pyplot as plt
 import statsmodels.api as sm
 from statsmodels.formula.api import ols
+import numbers
 
-def categorize(name:str)->str:
-    if 'PREPARATORIA' in name or 'PREPA.' in name:
-        return 'PREPARATORIA'
-    if 'FACULTAD' in name or 'FAC.' in name:
-        return 'FACULTAD'
-    if 'HOSPITAL' in name:
-        return 'HOSPITAL'
-    if 'CENTRO' in name or 'CTRO.' in name or 'C.' in name or 'INVESTIGAC' in name :
-        return 'CENTRO'
-    if 'SECRETARÍA' in name or 'SECRETARIA' in name or 'SRIA.' in name or 'DIRECCIÓN' in name or 'DIRECCION' in name or \
-       'DEPARTAMENTO' in name or 'DEPTO.' in name or 'CONTRALORIA' in name or 'AUDITORIA' in name or 'TESORERIA' in name \
-       or 'ESCOLAR' in name or 'ABOGACÍA' in name  or 'JUNTA' in name  or 'RECTORIA' in name  or 'IMAGEN' in name :
-        return 'ADMIN'
-    return 'OTRO'
-
-
-def analysis(file_name:str)->None:
-    df_complete = pd.read_csv(file_name)
-    df_complete["Fecha"] = pd.to_datetime(df_complete["anio"].map(str)+ "-" + df_complete["mes"].map(str), format="%Y-%m")
-    df_complete = df_complete.drop(['anio', 'mes'], axis=1)
-    df_complete["Tipo"] = df_complete["dependencia"].map(categorize)
-    # print_tabulate(df_complete[["dependencia","Tipo"]].drop_duplicates().head(150))
-    df_by_dep = df_complete.groupby(["dependencia", "Fecha"])[["Sueldo Neto"]].aggregate(pd.DataFrame.sum)
-    df_by_type = df_complete.groupby(["Tipo", "Fecha"])[["Sueldo Neto"]].aggregate(pd.DataFrame.sum)# .count()
-
-    # df_by_dep_by_anio = df_by_dep.groupby(["dependencia","anio"]).aggregate(pd.DataFrame.sum).sort_values(by=["dependencia", "anio"], ascending=True)
-    df_by_dep.reset_index(inplace=True)
-    df_by_dep.set_index("Fecha", inplace=True)
-    print_tabulate(df_by_dep.head(5))
-
-    # for dep in set(df_by_dep["dependencia"]):
-    #    plot_by_dep(df_by_dep, dep)
-    df_aux = df_complete.groupby(["Fecha","dependencia"])[['Sueldo Neto']].sum().unstack()
-    df_aux.plot(y = 'Sueldo Neto', legend=False, figsize=(32,18))
-    plt.xticks(rotation=90)
-    plt.savefig("img/foo.png")
-    plt.close()
-
-    df_by_type.boxplot(by = 'Tipo', figsize=(18,9))
-    plt.xticks(rotation=90)
-    plt.savefig("img/boxplot_tipo.png")
-    plt.close()
-
-    # aux = df_complete.groupby(["Tipo"])[["Sueldo Neto"]].aggregate(pd.DataFrame.sum)
-    # aux.reset_index(inplace=True)
-    df_by_type.reset_index(inplace=True)
-    df_aux = df_by_type.rename(columns={"Sueldo Neto": "GastoSalarios"}).drop(['Fecha'], axis=1)
-    # print(df_aux)
-
-    # shaphiro-wills
-    # Levenes or barletts
-    modl = ols("GastoSalarios ~ Tipo", data=df_aux).fit()
-    anova_df = sm.stats.anova_lm(modl, typ=2)
-    if anova_df["PR(>F)"][0] < 0.005:
-        print("hay diferencias")
-        print(anova_df)
-        # Prueba tukey
-        # imprimir los resultados
+def transform_variable(df: pd.DataFrame, x:str)->pd.Series:
+    if isinstance(df[x][0], numbers.Number):
+        return df[x]
     else:
-        print("No hay diferencias")
+        print("heeere")
+        return [i for i in range(0, len(df[x]))]
 
 
 
-    # df_by_dep.boxplot(by ='dependencia', figsize=(32,18))
-    # plt.xticks(rotation=90)
-    # plt.savefig("img/boxplot.png")# , bbox_inches='tight')
-    # plt.close()
+def linear_regression(df: pd.DataFrame, x:str, y: str)->None:
+    fixed_x = transform_variable(df, x)
+    model= sm.OLS(df[x],sm.add_constant(fixed_x)).fit()
+    print(model.summary())
 
-def plot_by_dep(df: pd.DataFrame, dep:str)->None:
-    df[df["dependencia"] == dep].plot(y =["Sueldo Neto"])
-    plt.savefig(f"img/lt_{dep}.png")
-    df[df["dependencia"] == dep].boxplot(by ='dependencia')
-    plt.savefig(f"img/bplt_{dep}.png")
+    coef = pd.read_html(model.summary().tables[1].as_html(),header=0,index_col=0)[0]['coef']
+    df_by_sal.plot(x=x,y=y, kind='scatter')
+    plt.plot(df_by_sal[x],[pd.DataFrame.mean(df_by_sal[y]) for _ in range(0, len(df_by_sal[x]))], color='green')
+    plt.plot(df_by_sal[x],[ coef.values[1] * x + coef.values[0] for x in range(0, len(df_by_sal[x]))], color='red')
+    plt.xticks(rotation=90)
+    plt.savefig(f'img/lr_{y}_{x}.png')
+    plt.close()
 
-analysis("csv/uanl.csv")
+    #model = ols(formula='Sueldo_Mensual ~ Fecha', data=df_by_sal).fit()
+
+df = pd.read_csv("csv/typed_uanl.csv")
+df_by_sal = df.groupby(["Fecha"])[["Sueldo Neto"]].aggregate(pd.DataFrame.mean)
+df_by_sal.reset_index(inplace=True)
+df_by_sal.columns=["Fecha", "Sueldo_Mensual"]
+print_tabulate(df_by_sal.head(5))
+linear_regression(df, "Fecha", "Sueldo_Mensual")
 #print_tabulate(df.head(50))

@@ -69,6 +69,7 @@ def analysis(file_name:str)->None:
     df_complete["Fecha"] = pd.to_datetime(df_complete["anio"].map(str)+ "-" + df_complete["mes"].map(str), format="%Y-%m")
     df_complete = df_complete.drop(['anio', 'mes'], axis=1)
     df_complete["Tipo"] = df_complete["dependencia"].map(categorize)
+    df_complete.to_csv("csv/typed_uanl.csv", index=False)
     # print_tabulate(df_complete[["dependencia","Tipo"]].drop_duplicates().head(150))
     df_by_dep = df_complete.groupby(["dependencia", "Fecha"])[["Sueldo Neto"]].aggregate(pd.DataFrame.sum)
     df_by_type = df_complete.groupby(["Tipo", "Fecha"])[["Sueldo Neto"]].aggregate(pd.DataFrame.sum)# .count()
