@@ -27,13 +27,14 @@ import matplotlib.pyplot as plt
 import statsmodels.api as sm
 from statsmodels.formula.api import ols
 import numbers
+from sklearn.preprocessing import PolynomialFeatures
+
 
 def transform_variable(df: pd.DataFrame, x:str)->pd.Series:
     if isinstance(df[x][0], numbers.Number):
         return df[x]
     else:
         return [i for i in range(0, len(df[x]))]
-
 
 
 def linear_regression(df: pd.DataFrame, x:str, y: str)->None:
@@ -43,14 +44,17 @@ def linear_regression(df: pd.DataFrame, x:str, y: str)->None:
     print(model.summary())
 
     coef = pd.read_html(model.summary().tables[1].as_html(),header=0,index_col=0)[0]['coef']
+    # df.plot(x=x,y=y, kind='scatter')
+    # plt.xticks(rotation=90)
+    # plt.savefig(f'img/scatter_{y}_{x}.png')
+    # plt.close()
     df.plot(x=x,y=y, kind='scatter')
-    plt.plot(df[x],[pd.DataFrame.mean(df[y]) for _ in range(0, len(df[x]))], color='green')
-    plt.plot(df_by_sal[x],[ coef.values[1] * x + coef.values[0] for x in range(0, len(df[x]))], color='red')
+    plt.plot(df[x],[pd.DataFrame.mean(df[y]) for _ in fixed_x, color='green')
+    plt.plot(df_by_sal[x],[ coef.values[1] * x + coef.values[0] for x in fixed_x, color='red')
     plt.xticks(rotation=90)
     plt.savefig(f'img/lr_{y}_{x}.png')
     plt.close()
 
-    #model = ols(formula='Sueldo_Mensual ~ Fecha', data=df_by_sal).fit()
 
 df = pd.read_csv("csv/typed_uanl.csv")
 #print_tabulate(df.head(50))
@@ -60,12 +64,6 @@ df_by_sal.columns=["Fecha", "sueldo_mensual"]
 print_tabulate(df_by_sal.head(5))
 linear_regression(df_by_sal, "Fecha", "sueldo_mensual")
 
-df_by_nom = df.groupby(["Fecha"])[["Nombre"]].aggregate(pd.DataFrame.count)
-print_tabulate(df_by_nom.head(50))
-df_by_nom.reset_index(inplace=True)
-df_by_nom.columns=["Fecha", "Nombre"]
-print_tabulate(df_by_nom.head(5))
-linear_regression(df_by_nom, "Fecha", "Nombre")
 #+END_SRC
 
 #+RESULTS:
@@ -84,8 +82,8 @@ linear_regression(df_by_nom, "Fecha", "Nombre")
 Dep. Variable:         sueldo_mensual   R-squared:                       0.148
 Model:                            OLS   Adj. R-squared:                  0.063
 Method:                 Least Squares   F-statistic:                     1.738
-Date:                Wed, 24 Mar 2021   Prob (F-statistic):              0.217
-Time:                        18:34:19   Log-Likelihood:                -89.286
+Date:                Sat, 27 Mar 2021   Prob (F-statistic):              0.217
+Time:                        09:02:51   Log-Likelihood:                -89.286
 No. Observations:                  12   AIC:                             182.6
 Df Residuals:                      10   BIC:                             183.5
 Df Model:                           1
@@ -106,58 +104,6 @@ Notes:
 [1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
 /home/jhernandez/.pyvenv/37/lib64/python3.7/site-packages/scipy/stats/stats.py:1604: UserWarning: kurtosistest only valid for n>=20 ... continuing anyway, n=12
   "anyway, n=%i" % int(n))
-|            |   Nombre |
-|------------+----------|
-| 2019-12-01 |    14410 |
-| 2020-01-01 |    12701 |
-| 2020-02-01 |    13865 |
-| 2020-03-01 |    14210 |
-| 2020-04-01 |    14309 |
-| 2020-05-01 |    14170 |
-| 2020-06-01 |    14253 |
-| 2020-07-01 |    12548 |
-| 2020-08-01 |    12290 |
-| 2020-09-01 |    13906 |
-| 2020-10-01 |    14009 |
-| 2020-11-01 |    14031 |
-|    | Fecha      |   Nombre |
-|----+------------+----------|
-|  0 | 2019-12-01 |    14410 |
-|  1 | 2020-01-01 |    12701 |
-|  2 | 2020-02-01 |    13865 |
-|  3 | 2020-03-01 |    14210 |
-|  4 | 2020-04-01 |    14309 |
-/home/jhernandez/.pyvenv/37/lib64/python3.7/site-packages/scipy/stats/stats.py:1604: UserWarning: kurtosistest only valid for n>=20 ... continuing anyway, n=12
-  "anyway, n=%i" % int(n))
-                            OLS Regression Results
-==============================================================================
-Dep. Variable:                 Nombre   R-squared:                       0.013
-Model:                            OLS   Adj. R-squared:                 -0.085
-Method:                 Least Squares   F-statistic:                    0.1355
-Date:                Wed, 24 Mar 2021   Prob (F-statistic):              0.720
-Time:                        18:34:19   Log-Likelihood:                -95.918
-No. Observations:                  12   AIC:                             195.8
-Df Residuals:                      10   BIC:                             196.8
-Df Model:                           1
-Covariance Type:            nonrobust
-==============================================================================
-                 coef    std err          t      P>|t|      [0.025      0.975]
-------------------------------------------------------------------------------
-const       1.386e+04    426.146     32.519      0.000    1.29e+04    1.48e+04
-x1           -24.1608     65.626     -0.368      0.720    -170.384     122.062
-==============================================================================
-Omnibus:                        3.677   Durbin-Watson:                   1.626
-Prob(Omnibus):                  0.159   Jarque-Bera (JB):                2.530
-Skew:                          -1.071   Prob(JB):                        0.282
-Kurtosis:                       2.314   Cond. No.                         12.4
-==============================================================================
-
-Notes:
-[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
-/home/jhernandez/.pyvenv/37/lib64/python3.7/site-packages/scipy/stats/stats.py:1604: UserWarning: kurtosistest only valid for n>=20 ... continuing anyway, n=12
-  "anyway, n=%i" % int(n))
 :end:
 
-
-[[file:img/lr_sueldo_mensual_Fecha.png]]
-[[file:img/lr_Nombre_Fecha.png]]
+[[file:img/scatter_sueldo_mensual_Fecha.png]]   [[file:img/lr_sueldo_mensual_Fecha.png]]         [[file:img/lr_Nombre_Fecha.png]]
