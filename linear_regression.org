@@ -39,15 +39,10 @@ def transform_variable(df: pd.DataFrame, x:str)->pd.Series:
 
 def linear_regression(df: pd.DataFrame, x:str, y: str)->None:
     fixed_x = transform_variable(df, x)
-    #print(fixed_x)
     model= sm.OLS(df[y],sm.add_constant(fixed_x)).fit()
     print(model.summary())
 
     coef = pd.read_html(model.summary().tables[1].as_html(),header=0,index_col=0)[0]['coef']
-    # df.plot(x=x,y=y, kind='scatter')
-    # plt.xticks(rotation=90)
-    # plt.savefig(f'img/scatter_{y}_{x}.png')
-    # plt.close()
     df.plot(x=x,y=y, kind='scatter')
     plt.plot(df[x],[pd.DataFrame.mean(df[y]) for _ in fixed_x, color='green')
     plt.plot(df_by_sal[x],[ coef.values[1] * x + coef.values[0] for x in fixed_x, color='red')
@@ -68,42 +63,6 @@ linear_regression(df_by_sal, "Fecha", "sueldo_mensual")
 
 #+RESULTS:
 :results:
-|   |      Fecha | sueldo_mensual |
-|---+------------+----------------|
-| 0 | 2019-12-01 |        10640.4 |
-| 1 | 2020-01-01 |        11344.2 |
-| 2 | 2020-02-01 |        11231.7 |
-| 3 | 2020-03-01 |        11289.4 |
-| 4 | 2020-04-01 |          11735 |
-/home/jhernandez/.pyvenv/37/lib64/python3.7/site-packages/scipy/stats/stats.py:1604: UserWarning: kurtosistest only valid for n>=20 ... continuing anyway, n=12
-  "anyway, n=%i" % int(n))
-                            OLS Regression Results
-==============================================================================
-Dep. Variable:         sueldo_mensual   R-squared:                       0.148
-Model:                            OLS   Adj. R-squared:                  0.063
-Method:                 Least Squares   F-statistic:                     1.738
-Date:                Sat, 27 Mar 2021   Prob (F-statistic):              0.217
-Time:                        09:02:51   Log-Likelihood:                -89.286
-No. Observations:                  12   AIC:                             182.6
-Df Residuals:                      10   BIC:                             183.5
-Df Model:                           1
-Covariance Type:            nonrobust
-==============================================================================
-                 coef    std err          t      P>|t|      [0.025      0.975]
-------------------------------------------------------------------------------
-const        1.11e+04    245.201     45.285      0.000    1.06e+04    1.17e+04
-x1            49.7754     37.761      1.318      0.217     -34.360     133.911
-==============================================================================
-Omnibus:                        6.931   Durbin-Watson:                   2.317
-Prob(Omnibus):                  0.031   Jarque-Bera (JB):                3.405
-Skew:                          -1.254   Prob(JB):                        0.182
-Kurtosis:                       3.719   Cond. No.                         12.4
-==============================================================================
-
-Notes:
-[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
-/home/jhernandez/.pyvenv/37/lib64/python3.7/site-packages/scipy/stats/stats.py:1604: UserWarning: kurtosistest only valid for n>=20 ... continuing anyway, n=12
-  "anyway, n=%i" % int(n))
 :end:
 
 [[file:img/scatter_sueldo_mensual_Fecha.png]]   [[file:img/lr_sueldo_mensual_Fecha.png]]         [[file:img/lr_Nombre_Fecha.png]]
