@@ -26,9 +26,10 @@ def print_tabulate(df: pd.DataFrame):
 
 #+END_SRC
 
-#+RESULTS:
+#+RESULTS: includes-base-fn
 :results:
 :end:
+
 
 ** UANL
 Código para extraer la información de transparencia de la UANL

@@ -1,40 +1,24 @@
 #+TITLE: Linear Regression
 
-* Imports
-#+NAME: imports
-#+BEGIN_SRC python :session data :results replace drawer output :exports both
+* UANL
+
+#+NAME: regression
+#+BEGIN_SRC python :session data :results replace drawer output :exports both :tangle uanl_lr.py :noweb yes :eval never-export
+import matplotlib.pyplot as plt
+import statsmodels.api as sm
+import numbers
 import pandas as pd
 from tabulate import tabulate
-from typing import Tuple, List
 
 
 def print_tabulate(df: pd.DataFrame):
-    print(tabulate(df, headers=df.columns, tablefmt='orgtbl'))
-
-#+END_SRC
-
-#+RESULTS: imports
-:results:
-:end:
-
-
-* UANL
-
-
-#+BEGIN_SRC python :session data :results replace drawer output :exports both :tangle uanl_lr.py :noweb yes :eval never-export
-<<imports>>
-import matplotlib.pyplot as plt
-import statsmodels.api as sm
-from statsmodels.formula.api import ols
-import numbers
-from sklearn.preprocessing import PolynomialFeatures
-
+    print(tabulate(df, headers=df.columns, tablefmt="orgtbl"))
 
 def transform_variable(df: pd.DataFrame, x:str)->pd.Series:
     if isinstance(df[x][0], numbers.Number):
-        return df[x]
+        return df[x] # type: pd.Series
     else:
-        return [i for i in range(0, len(df[x]))]
+        return pd.Series([i for i in range(0, len(df[x]))])
 
 
 def linear_regression(df: pd.DataFrame, x:str, y: str)->None:
@@ -44,25 +28,25 @@ def linear_regression(df: pd.DataFrame, x:str, y: str)->None:
 
     coef = pd.read_html(model.summary().tables[1].as_html(),header=0,index_col=0)[0]['coef']
     df.plot(x=x,y=y, kind='scatter')
-    plt.plot(df[x],[pd.DataFrame.mean(df[y]) for _ in fixed_x], color='green')
-    plt.plot(df_by_sal[x],[ coef.values[1] * x + coef.values[0] for x in fixed_x], color='red')
+    plt.plot(df[x],[pd.DataFrame.mean(df[y]) for _ in fixed_x.items()], color='green')
+    plt.plot(df_by_sal[x],[ coef.values[1] * x + coef.values[0] for _, x in fixed_x.items()], color='red')
     plt.xticks(rotation=90)
     plt.savefig(f'img/lr_{y}_{x}.png')
     plt.close()
 
 
-df = pd.read_csv("csv/typed_uanl.csv")
+df = pd.read_csv("csv/typed_uanl.csv") # type: pd.DataFrame
 #print_tabulate(df.head(50))
-df_by_sal = df.groupby(["Fecha"])[["Sueldo Neto"]].aggregate(pd.DataFrame.mean)
-df_by_sal.reset_index(inplace=True)
-df_by_sal.columns=["Fecha", "sueldo_mensual"]
+df_by_sal = df.groupby("Fecha")\
+              .aggregate(sueldo_mensual=pd.NamedAgg(column="Sueldo Neto", aggfunc=pd.DataFrame.mean))
 # df_by_sal["sueldo_mensual"] = df_by_sal["sueldo_mensual"]**10
+df_by_sal.reset_index(inplace=True)
 print_tabulate(df_by_sal.head(5))
 linear_regression(df_by_sal, "Fecha", "sueldo_mensual")
 
 #+END_SRC
 
-#+RESULTS:
+#+RESULTS: regression
 :results:
 |   |      Fecha | sueldo_mensual |
 |---+------------+----------------|
@@ -73,22 +57,22 @@ linear_regression(df_by_sal, "Fecha", "sueldo_mensual")
 | 4 | 2020-04-01 |          11735 |
 /home/jhernandez/.pyvenv/37/lib64/python3.7/site-packages/scipy/stats/stats.py:1604: UserWarning: kurtosistest only valid for n>=20 ... continuing anyway, n=12
   "anyway, n=%i" % int(n))
-                            OLS Regression Results                            
+                            OLS Regression Results
 ==============================================================================
 Dep. Variable:         sueldo_mensual   R-squared:                       0.148
 Model:                            OLS   Adj. R-squared:                  0.063
 Method:                 Least Squares   F-statistic:                     1.738
-Date:                Sat, 27 Mar 2021   Prob (F-statistic):              0.217
-Time:                        10:12:49   Log-Likelihood:                -89.286
+Date:                Mon, 12 Apr 2021   Prob (F-statistic):              0.217
+Time:                        18:52:57   Log-Likelihood:                -89.286
 No. Observations:                  12   AIC:                             182.6
 Df Residuals:                      10   BIC:                             183.5
-Df Model:                           1                                         
-Covariance Type:            nonrobust                                         
+Df Model:                           1
+Covariance Type:            nonrobust
 ==============================================================================
                  coef    std err          t      P>|t|      [0.025      0.975]
 ------------------------------------------------------------------------------
 const        1.11e+04    245.201     45.285      0.000    1.06e+04    1.17e+04
-x1            49.7754     37.761      1.318      0.217     -34.360     133.911
+0             49.7754     37.761      1.318      0.217     -34.360     133.911
 ==============================================================================
 Omnibus:                        6.931   Durbin-Watson:                   2.317
 Prob(Omnibus):                  0.031   Jarque-Bera (JB):                3.405
@@ -101,5 +85,6 @@ Notes:
 /home/jhernandez/.pyvenv/37/lib64/python3.7/site-packages/scipy/stats/stats.py:1604: UserWarning: kurtosistest only valid for n>=20 ... continuing anyway, n=12
   "anyway, n=%i" % int(n))
 :end:
+
 
 [[file:img/scatter_sueldo_mensual_Fecha.png]]   [[file:img/lr_sueldo_mensual_Fecha.png]]         [[file:img/lr_Nombre_Fecha.png]]

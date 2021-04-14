@@ -1,0 +1,202 @@
+#+TITLE: Forecasting
+
+
+* UANL
+ #+Name forecasting_uanl
+ #+BEGIN_SRC python :session data :results replace drawer output :exports both :tangle uanl_forecasting.py :noweb yes :eval never-export
+
+import matplotlib.pyplot as plt
+import statsmodels.api as sm
+import numbers
+import pandas as pd
+from tabulate import tabulate
+from statsmodels.stats.outliers_influence import summary_table
+from typing import Tuple, Dict
+import numpy as np
+
+
+def print_tabulate(df: pd.DataFrame):
+    print(tabulate(df, headers=df.columns, tablefmt="orgtbl"))
+
+def transform_variable(df: pd.DataFrame, x:str)->pd.Series:
+    if isinstance(df[x][0], numbers.Number):
+        return df[x] # type: pd.Series
+    else:
+        return pd.Series([i for i in range(0, len(df[x]))])
+
+def linear_regression(df: pd.DataFrame, x:str, y: str)->Dict[str, float]:
+    fixed_x = transform_variable(df, x)
+    model= sm.OLS(df[y],sm.add_constant(fixed_x), alpha=0.1).fit()
+    bands = pd.read_html(model.summary().tables[1].as_html(),header=0,index_col=0)[0]
+    print_tabulate(pd.read_html(model.summary().tables[1].as_html(),header=0,index_col=0)[0])
+    coef = pd.read_html(model.summary().tables[1].as_html(),header=0,index_col=0)[0]['coef']
+    r_2_t = pd.read_html(model.summary().tables[0].as_html(),header=None,index_col=None)[0]
+    return {'m': coef.values[1], 'b': coef.values[0], 'r2': r_2_t.values[0][3], 'r2_adj': r_2_t.values[1][3], 'low_band': bands['[0.025'][0], 'hi_band': bands['0.975]'][0]}
+
+def plt_lr(df: pd.DataFrame, x:str, y: str, m: float, b: float, r2: float, r2_adj: float, low_band: float, hi_band: float, colors: Tuple[str,str]):
+    fixed_x = transform_variable(df, x)
+    df.plot(x=x,y=y, kind='scatter')
+    plt.plot(df[x],[ m * x + b for _, x in fixed_x.items()], color=colors[0])
+    plt.fill_between(df[x],
+                     [ m * x  + low_band for _, x in fixed_x.items()],
+                     [ m * x + hi_band for _, x in fixed_x.items()], alpha=0.2, color=colors[1])
+
+
+
+
+
+df = pd.read_csv("csv/typed_uanl.csv") # type: pd.DataFrame
+#print_tabulate(df.head(50))
+df_by_sal = df.groupby("Fecha")\
+              .aggregate(sueldo_mensual=pd.NamedAgg(column="Sueldo Neto", aggfunc=pd.DataFrame.mean))
+df_by_sal.reset_index(inplace=True)
+# df_by_sal["sueldo_mensual"] = df_by_sal["sueldo_mensual"]**10
+#print_tabulate(df_by_sal.head(5))
+a = linear_regression(df_by_sal, "Fecha", "sueldo_mensual")
+plt_lr(df=df_by_sal, x="Fecha", y="sueldo_mensual", colors=('red', 'orange'), **a)
+
+plt.xticks(rotation=90)
+plt.savefig('img/lr_sueldo_mensual_Fecha_m.png')
+plt.close()
+
+ #+END_SRC
+
+ #+RESULTS:
+ :results:
+ /home/jhernandez/.pyvenv/37/lib64/python3.7/site-packages/scipy/stats/stats.py:1604: UserWarning: kurtosistest only valid for n>=20 ... continuing anyway, n=12
+   "anyway, n=%i" % int(n))
+ /home/jhernandez/.pyvenv/37/lib64/python3.7/site-packages/scipy/stats/stats.py:1604: UserWarning: kurtosistest only valid for n>=20 ... continuing anyway, n=12
+   "anyway, n=%i" % int(n))
+ |       |       coef |   std err |      t |   P>|t| |   [0.025 |    0.975] |
+ |-------+------------+-----------+--------+---------+----------+-----------|
+ | const | 11100      |   245.201 | 45.285 |   0     | 10600    | 11700     |
+ | 0     |    49.7754 |    37.761 |  1.318 |   0.217 |   -34.36 |   133.911 |
+ /home/jhernandez/.pyvenv/37/lib64/python3.7/site-packages/scipy/stats/stats.py:1604: UserWarning: kurtosistest only valid for n>=20 ... continuing anyway, n=12
+   "anyway, n=%i" % int(n))
+ /home/jhernandez/.pyvenv/37/lib64/python3.7/site-packages/scipy/stats/stats.py:1604: UserWarning: kurtosistest only valid for n>=20 ... continuing anyway, n=12
+   "anyway, n=%i" % int(n))
+ :end:
+
+
+[[file:img/lr_sueldo_mensual_Fecha_m.png]]
+* forecasting
+
+
+ #+Name forecasting
+ #+BEGIN_SRC python :session data :results replace drawer output :exports both :tangle uanl_forecasting.py :noweb yes :eval never-export
+
+import matplotlib.pyplot as plt
+import statsmodels.api as sm
+import numbers
+import pandas as pd
+from tabulate import tabulate
+from statsmodels.stats.outliers_influence import summary_table
+from typing import Tuple, Dict
+import numpy as np
+
+
+def print_tabulate(df: pd.DataFrame):
+    print(tabulate(df, headers=df.columns, tablefmt="orgtbl"))
+
+def transform_variable(df: pd.DataFrame, x:str)->pd.Series:
+    if isinstance(df[x][df.index[0]], numbers.Number):
+        return df[x] # type: pd.Series
+    else:
+        return pd.Series([i for i in range(0, len(df[x]))])
+
+def linear_regression(df: pd.DataFrame, x:str, y: str)->Dict[str, float]:
+    fixed_x = transform_variable(df, x)
+    model= sm.OLS(list(df[y]),sm.add_constant(fixed_x), alpha=0.05).fit()
+    bands = pd.read_html(model.summary().tables[1].as_html(),header=0,index_col=0)[0]
+    print_tabulate(pd.read_html(model.summary().tables[1].as_html(),header=0,index_col=0)[0])
+    coef = pd.read_html(model.summary().tables[1].as_html(),header=0,index_col=0)[0]['coef']
+    r_2_t = pd.read_html(model.summary().tables[0].as_html(),header=None,index_col=None)[0]
+    return {'m': coef.values[1], 'b': coef.values[0], 'r2': r_2_t.values[0][3], 'r2_adj': r_2_t.values[1][3], 'low_band': bands['[0.025'][0], 'hi_band': bands['0.975]'][0]}
+
+def plt_lr(df: pd.DataFrame, x:str, y: str, m: float, b: float, r2: float, r2_adj: float, low_band: float, hi_band: float, colors: Tuple[str,str]):
+    fixed_x = transform_variable(df, x)
+    plt.plot(df[x],[ m * x + b for _, x in fixed_x.items()], color=colors[0])
+    plt.fill_between(df[x],
+                     [ m * x  + low_band for _, x in fixed_x.items()],
+                     [ m * x + hi_band for _, x in fixed_x.items()], alpha=0.2, color=colors[1])
+
+
+def normalize_distribution(dist: np.array, n: int)->np.array:
+    b = dist - min(dist) + 0.000001
+    c = (b / np.sum(b)) * n
+    return np.round(c)
+
+# begin_date = '2016-01-01'
+# end_date = '2022-01-01'
+# date_range = pd.date_range(start=begin_date, end=end_date, freq='1D')
+# norm_dist = np.random.standard_normal(len(date_range))
+# sales = normalize_distribution(norm_dist, 50*len(date_range))
+# df = pd.DataFrame({'Fecha': date_range, 'ventas': sales}) # type: pd.DataFrame
+# df.to_csv('csv/sales.csv', index=False)
+full_df = pd.read_csv('csv/sales.csv')
+# df_by_sal = df.groupby("Fecha")\
+#               .aggregate(sueldo_mensual=pd.NamedAgg(column="Sueldo Neto", aggfunc=pd.DataFrame.mean))
+# df_by_sal.reset_index(inplace=True)
+# # df_by_sal["sueldo_mensual"] = df_by_sal["sueldo_mensual"]**10
+# #print_tabulate(df_by_sal.head(5))
+df = full_df.tail(50)
+x = "Fecha"
+y= "ventas"
+df.plot(x=x,y=y, kind='scatter')
+a = linear_regression(df, x,y)
+plt_lr(df=df, x=x, y=y, colors=('red', 'orange'), **a)
+a = linear_regression(df.tail(5), x,y)
+plt_lr(df=df.tail(5), x=x, y=y, colors=('red', 'orange'), **a)
+df_j = df[pd.to_datetime(df[x]).dt.dayofweek == 4]
+print_tabulate(df_j)
+a = linear_regression(df_j, x,y)
+plt_lr(df=df_j, x=x, y=y, colors=('blue', 'blue'), **a)
+#
+plt.xticks(rotation=90)
+plt.savefig('img/lr_ventas_Fecha_m.png')
+plt.close()
+
+ #+END_SRC
+
+ #+RESULTS:
+ :results:
+ |       |    coef | std err |      t |   P> |      t |        | [0.025 | 0.975] |
+ |-------+---------+---------+--------+------+--------+--------+--------+--------|
+ | const | 52.6753 |   3.533 | 14.908 |    0 | 45.571 | 59.779 |        |        |
+ |     0 | -0.0904 |   0.124 | -0.728 | 0.47 |  -0.34 |  0.159 |        |        |
+ /home/jhernandez/.pyvenv/37/lib64/python3.7/site-packages/statsmodels/stats/stattools.py:75: ValueWarning: omni_normtest is not valid with less than 8 observations; 5 samples were given.
+   "samples were given." % int(n), ValueWarning)
+ /home/jhernandez/.pyvenv/37/lib64/python3.7/site-packages/statsmodels/stats/stattools.py:75: ValueWarning: omni_normtest is not valid with less than 8 observations; 5 samples were given.
+   "samples were given." % int(n), ValueWarning)
+ |       |   coef |   std err |     t |   P>|t| |   [0.025 |   0.975] |
+ |-------+--------+-----------+-------+---------+----------+----------|
+ | const |   32.4 |     7.97  | 4.065 |   0.027 |    7.036 |   57.764 |
+ | 0     |    5.8 |     3.254 | 1.783 |   0.173 |   -4.555 |   16.155 |
+ /home/jhernandez/.pyvenv/37/lib64/python3.7/site-packages/statsmodels/stats/stattools.py:75: ValueWarning: omni_normtest is not valid with less than 8 observations; 5 samples were given.
+   "samples were given." % int(n), ValueWarning)
+ /home/jhernandez/.pyvenv/37/lib64/python3.7/site-packages/statsmodels/stats/stattools.py:75: ValueWarning: omni_normtest is not valid with less than 8 observations; 5 samples were given.
+   "samples were given." % int(n), ValueWarning)
+ |      | Fecha      |   ventas |
+ |------+------------+----------|
+ | 2149 | 2021-11-19 |       49 |
+ | 2156 | 2021-11-26 |       51 |
+ | 2163 | 2021-12-03 |       59 |
+ | 2170 | 2021-12-10 |       34 |
+ | 2177 | 2021-12-17 |       48 |
+ | 2184 | 2021-12-24 |       63 |
+ | 2191 | 2021-12-31 |       64 |
+ /home/jhernandez/.pyvenv/37/lib64/python3.7/site-packages/statsmodels/stats/stattools.py:75: ValueWarning: omni_normtest is not valid with less than 8 observations; 7 samples were given.
+   "samples were given." % int(n), ValueWarning)
+ /home/jhernandez/.pyvenv/37/lib64/python3.7/site-packages/statsmodels/stats/stattools.py:75: ValueWarning: omni_normtest is not valid with less than 8 observations; 7 samples were given.
+   "samples were given." % int(n), ValueWarning)
+ |       |    coef |   std err |     t |   P>|t| |   [0.025 |   0.975] |
+ |-------+---------+-----------+-------+---------+----------+----------|
+ | const | 46.3571 |     7.091 | 6.537 |   0.001 |   28.128 |   64.586 |
+ | 0     |  2.0714 |     1.967 | 1.053 |   0.34  |   -2.984 |    7.127 |
+ /home/jhernandez/.pyvenv/37/lib64/python3.7/site-packages/statsmodels/stats/stattools.py:75: ValueWarning: omni_normtest is not valid with less than 8 observations; 7 samples were given.
+   "samples were given." % int(n), ValueWarning)
+ /home/jhernandez/.pyvenv/37/lib64/python3.7/site-packages/statsmodels/stats/stattools.py:75: ValueWarning: omni_normtest is not valid with less than 8 observations; 7 samples were given.
+   "samples were given." % int(n), ValueWarning)
+ :end:
+
+[[file:img/lr_ventas_Fecha_m.png]]
