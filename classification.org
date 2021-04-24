@@ -90,14 +90,18 @@ list_t = [
 points = [point for point, _ in list_t]
 labels = [label for _, label in list_t]
 
-
-kn = k_nearest_neightbors(points, labels, [np.array([100, 150])], 5)
+kn = k_nearest_neightbors(
+    points,
+    labels,
+    [np.array([100, 150]), np.array([1, 1]), np.array([1, 300]), np.array([80, 40])],
+    5,
+)
 print(kn)
 #+end_src
 
 #+RESULTS:
 :results:
-[ModeResult(mode=array(['grupo3'], dtype='<U6'), count=array([4]))]
+[ModeResult(mode=array(['grupo2'], dtype='<U6'), count=array([3])), ModeResult(mode=array(['grupo1'], dtype='<U6'), count=array([4])), ModeResult(mode=array(['grupo3'], dtype='<U6'), count=array([3])), ModeResult(mode=array(['grupo2'], dtype='<U6'), count=array([4]))]
 :end:
 
 [[file:img/groups.png]]
