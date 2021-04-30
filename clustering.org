@@ -1,4 +1,4 @@
-#+TITLE: Clstering
+#+TITLE: Clustering
 * code
 
 #+begin_src python :session data :results replace drawer output :exports both :tangle classification.py :noweb yes :eval never-export
@@ -69,7 +69,7 @@ def k_means(points: List[np.array], k: int):
     DIM = len(points[0])
     N = len(points)
     num_cluster = k
-    iterations = 10
+    iterations = 15
 
     x = np.array(points)
     y = np.random.randint(0, num_cluster, N)
@@ -89,6 +89,7 @@ def k_means(points: List[np.array], k: int):
         plt.scatter(xp, yp)
     plt.savefig("img/kmeans.png")
     plt.close()
+    return mean
 
 
 groups = [(20, 20, "grupo1"), (80, 40, "grupo2"), (200, 200, "grupo3")]
@@ -105,10 +106,14 @@ kn = k_means(
     points,
     3,
 )
+print(kn)
 #+end_src
 
 #+RESULTS:
 :results:
+[[ 30.48717949  32.35897436]
+ [120.06451613  46.51612903]
+ [217.02439024 220.41463415]]
 :end:
 
 [[file:img/clusters.png]]
