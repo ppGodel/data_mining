@@ -8,8 +8,6 @@ import matplotlib.pyplot as plt
 from typing import Tuple, Dict, List
 import numpy as np
 from functools import reduce
-from scipy.stats import mode
-from sklearn.cluster import KMeans
 
 
 def print_tabulate(df: pd.DataFrame):
@@ -111,9 +109,9 @@ print(kn)
 
 #+RESULTS:
 :results:
-[[ 30.48717949  32.35897436]
- [120.06451613  46.51612903]
- [217.02439024 220.41463415]]
+[[ 95.775       41.075     ]
+ [ 24.03174603  26.31746032]
+ [205.42553191 206.34042553]]
 :end:
 
 [[file:img/clusters.png]]

@@ -10,19 +10,18 @@
 ** Instructor
    José Anastacio Hernández Saldaña, M.C.
 ** Class Duration
-   <2021-02-01 Mon>--<2021-05-29 Sat>--<2021-06-05 Sat>
+   <2022-01-17 Mon>--<2022-05-14 Sat>
 *** Holidays
-1) Constitution day:: <2021-02-01 Mon>
-2) Benito Juarez/Spring:: <2021-03-15 Mon>
-3) Eastern vacations:: <2021-03-29 Mon>--<2021-04-11 Sun>
-4) Labour day:: <2021-05-01 Sat>
-5) Puebla's battle:: <2021-05-05 Wed>
-6) Teacher's day:: <2021-05-15 Sat>
+1) Constitution day:: <2022-02-07 Mon>
+2) Benito Juarez/Spring:: <2022-03-21 Mon>
+3) Eastern vacations:: <2022-04-11 Mon>--<2022-04-23 Sat>
+4) Puebla's battle:: <2022-05-05 Thu>
+5) No class <2022-02-12 Sat>
 ** Themes
 1) Class Introduction
 2) Data Cleaning
 3) Data Parsing
-4) Decriptive Statistics
+4) Descriptive Statistics
 5) Data Visualization
 6) Statistic Test
 7) Linear Models
@@ -30,7 +29,7 @@
 9) Data classification
 10) Data clustering
 11) Text analysis
-12) Image anayisis
+12) RNN
 ** Score
 - 10 Practices
 ** Tools
