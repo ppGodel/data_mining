@@ -1,7 +1,7 @@
 #+TITLE: Data Mining
 #+Author: José Anastacio Hernández Saldaña
 #+email: jose.hernandezsal@uanl.edu.mx
-#+Date:<2021-02-01 Mon>
+#+Date:<2022-08-10 Wed>
 #+LANGUAGE:  EN
 #+LINK_HOME: http://ppgodel.hopto.org
 #+LINK_MESSAGE: https://discord.gg/zp54hTN
@@ -10,19 +10,15 @@
 ** Instructor
    José Anastacio Hernández Saldaña, M.C.
 ** Class Duration
-   <2021-02-01 Mon>--<2021-05-29 Sat>--<2021-06-05 Sat>
+   <2022-08-08 Mon>--<2022-11-12 Sat>
 *** Holidays
-1) Constitution day:: <2021-02-01 Mon>
-2) Benito Juarez/Spring:: <2021-03-15 Mon>
-3) Eastern vacations:: <2021-03-29 Mon>--<2021-04-11 Sun>
-4) Labour day:: <2021-05-01 Sat>
-5) Puebla's battle:: <2021-05-05 Wed>
-6) Teacher's day:: <2021-05-15 Sat>
+- Mexican Independence: <2022-09-16 Fri>
+- Mexican Revolution: <2022-11-21 Mon>
 ** Themes
 1) Class Introduction
 2) Data Cleaning
 3) Data Parsing
-4) Decriptive Statistics
+4) Descriptive Statistics
 5) Data Visualization
 6) Statistic Test
 7) Linear Models
@@ -37,3 +33,9 @@
 - git/github
 - python
 - IDE/editor de texto
+** Dataset requirements
+- At least 2 numeric values
+- at least 1 alphanumeric value
+- at least 1 date value.
+- 1 Dataset preferability.
+- minimum 1000 rows.
