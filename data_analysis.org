@@ -63,13 +63,15 @@ def categorize(name:str)->str:
         return 'ADMIN'
     return 'OTRO'
 
+def transform_into_typed_df(raw_df: pd.DataFrame)->pd.DataFrame:
+    raw_df["Fecha"] = pd.to_datetime(raw_df["anio"].map(str)+ "-" + raw_df["mes"].map(str), format="%Y-%m")
+    raw_df = raw_df.drop(['anio', 'mes'], axis=1)
+    raw_df["Tipo"] = raw_df["dependencia"].map(categorize)
+    return raw_df
 
-def analysis(file_name:str)->None:
-    df_complete = pd.read_csv(file_name)
-    df_complete["Fecha"] = pd.to_datetime(df_complete["anio"].map(str)+ "-" + df_complete["mes"].map(str), format="%Y-%m")
-    df_complete = df_complete.drop(['anio', 'mes'], axis=1)
-    df_complete["Tipo"] = df_complete["dependencia"].map(categorize)
-    df_complete.to_csv("csv/typed_uanl.csv", index=False)
+
+
+def analysis(df_complete: pd.DataFrame)->None:
     # print_tabulate(df_complete[["dependencia","Tipo"]].drop_duplicates().head(150))
     df_by_dep = df_complete.groupby(["dependencia", "Fecha"])[["Sueldo Neto"]].aggregate(pd.DataFrame.sum)
     df_by_type = df_complete.groupby(["Tipo", "Fecha"])[["Sueldo Neto"]].aggregate(pd.DataFrame.sum)# .count()
@@ -123,24 +125,64 @@ def plot_by_dep(df: pd.DataFrame, dep:str)->None:
     df[df["dependencia"] == dep].boxplot(by ='dependencia')
     plt.savefig(f"img/bplt_{dep}.png")
 
-analysis("csv/uanl.csv")
-#print_tabulate(df.head(50))
+
+def create_typed_df(filename:str)-> pd.DataFrame:
+    df_complete = pd.read_csv(filename)
+    raw_df = transform_into_typed_df(df_complete)
+    print_tabulate(raw_df.head(50))
+    raw_df.to_csv("csv/typed_uanl.csv", index=False)
+    return raw_df
+
+def show_type_of_department():
+    df_complete = pd.read_csv("csv/typed_uanl.csv")
+    print_tabulate(df_complete[["dependencia","Tipo"]].\
+                   drop_duplicates().head(150))
+
+def show_data_by_dependency_and_date():
+    df_complete = pd.read_csv("csv/typed_uanl.csv")
+    df_by_dep = df_complete.groupby(["dependencia", "Fecha"])[["Sueldo Neto"]].aggregate(pd.DataFrame.sum)
+    df_by_dep.reset_index(inplace=True)
+    df_by_dep.set_index("Fecha", inplace=True)
+    print_tabulate(df_by_dep[df_by_dep["dependencia"]== "FAC. DE CIENCIAS FISICO-MATEMATICAS"].head(50))
+
+
+def show_data_by_type_and_date():
+    df_complete = pd.read_csv("csv/typed_uanl.csv")
+    df_by_type = df_complete.groupby(["Tipo", "Fecha"])[["Sueldo Neto"]].aggregate(pd.DataFrame.sum)
+    df_by_type.reset_index(inplace=True)
+    df_by_type.set_index("Fecha", inplace=True)
+    print_tabulate(df_by_type.head(150))
+
+
+def show_salary_and_count_by_type_and_date():
+    df_complete = pd.read_csv("csv/typed_uanl.csv")
+    df_by_type = df_complete.groupby(["Tipo", "Fecha"]).agg({'Sueldo Neto': ['sum', 'count', 'mean', 'min']})
+    df_by_type.reset_index(inplace=True)
+    df_by_type.columns = ['Tipo', 'Fecha', 'Total_sueldos', 'Conteo_Empleado', 'Promedio_sueldo', 'Salario_Maximo']
+    df_by_type.set_index("Fecha", inplace=True)
+    print_tabulate(df_by_type.head(150))
+
+def show_salary_and_count_by_dependency_and_date():
+    df_complete = pd.read_csv("csv/typed_uanl.csv")
+    df_by_type = df_complete.groupby(["dependencia", "Fecha"]).agg({'Sueldo Neto': ['sum', 'count', 'mean', 'max']})
+    df_by_type.reset_index(inplace=True)
+    df_by_type.columns = ['Tipo', 'Fecha', 'Total_sueldos', 'Conteo_Empleado', 'Promedio_sueldo', 'Salario_Maximo']
+    df_by_type.set_index("Fecha", inplace=True)
+    print_tabulate(df_by_type)
+
+
+if __name__ == "__main__":
+    # create_typed_df("csv/uanl.csv")
+    # show_data_by_dependency_and_date()
+    # show_data_by_type_and_date()
+    # show_salary_and_count_by_type_and_date()
+    # show_salary_and_count_by_dependency_and_date()
+    # analysis("csv/uanl.csv")
 
 #+END_SRC
 
 #+RESULTS:
 :results:
-|                     | dependencia                                  | Sueldo Neto |
-|---------------------+----------------------------------------------+-------------|
-| 2019-12-01 00:00:00 | "CAPILLA ALFONSINA" BIBLIOTECA UNIVERSITARIA |      518869 |
-| 2020-01-01 00:00:00 | "CAPILLA ALFONSINA" BIBLIOTECA UNIVERSITARIA |      528440 |
-| 2020-02-01 00:00:00 | "CAPILLA ALFONSINA" BIBLIOTECA UNIVERSITARIA |      567098 |
-| 2020-03-01 00:00:00 | "CAPILLA ALFONSINA" BIBLIOTECA UNIVERSITARIA |      570808 |
-| 2020-04-01 00:00:00 | "CAPILLA ALFONSINA" BIBLIOTECA UNIVERSITARIA |      586530 |
-hay diferencias
-                sum_sq    df            F        PR(>F)
-Tipo      4.496036e+16   5.0  1518.732848  1.093663e-66
-Residual  3.907710e+14  66.0          NaN           NaN
 :end:
 
 [[file:img/foo.png]]
