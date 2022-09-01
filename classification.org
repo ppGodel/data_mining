@@ -101,7 +101,7 @@ print(kn)
 
 #+RESULTS:
 :results:
-[ModeResult(mode=array(['grupo2'], dtype='<U6'), count=array([3])), ModeResult(mode=array(['grupo1'], dtype='<U6'), count=array([4])), ModeResult(mode=array(['grupo3'], dtype='<U6'), count=array([3])), ModeResult(mode=array(['grupo2'], dtype='<U6'), count=array([4]))]
+[ModeResult(mode=array(['grupo3'], dtype='<U6'), count=array([3])), ModeResult(mode=array(['grupo1'], dtype='<U6'), count=array([2])), ModeResult(mode=array(['grupo3'], dtype='<U6'), count=array([3])), ModeResult(mode=array(['grupo2'], dtype='<U6'), count=array([4]))]
 :end:
 
 [[file:img/groups.png]]

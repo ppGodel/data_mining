@@ -1,15 +1,12 @@
-import pandas as pd
-from tabulate import tabulate
-from typing import Tuple, List
-
-
-def print_tabulate(df: pd.DataFrame):
-    print(tabulate(df, headers=df.columns.tolist(), tablefmt='orgtbl'))
-
 import matplotlib.pyplot as plt
 import statsmodels.api as sm
 import numbers
+import pandas as pd
+from tabulate import tabulate
 
+
+def print_tabulate(df: pd.DataFrame):
+    print(tabulate(df, headers=df.columns, tablefmt="orgtbl"))
 
 def transform_variable(df: pd.DataFrame, x:str)->pd.Series:
     if isinstance(df[x][0], numbers.Number):
@@ -21,7 +18,7 @@ def transform_variable(df: pd.DataFrame, x:str)->pd.Series:
 def linear_regression(df: pd.DataFrame, x:str, y: str)->None:
     fixed_x = transform_variable(df, x)
     model= sm.OLS(df[y],sm.add_constant(fixed_x)).fit()
-    print(model.summary())
+    # print(model.summary())
 
     coef = pd.read_html(model.summary().tables[1].as_html(),header=0,index_col=0)[0]['coef']
     df.plot(x=x,y=y, kind='scatter')
@@ -30,6 +27,7 @@ def linear_regression(df: pd.DataFrame, x:str, y: str)->None:
     plt.xticks(rotation=90)
     plt.savefig(f'img/lr_{y}_{x}.png')
     plt.close()
+    print('ok')
 
 
 df = pd.read_csv("csv/typed_uanl.csv") # type: pd.DataFrame
@@ -37,5 +35,6 @@ df = pd.read_csv("csv/typed_uanl.csv") # type: pd.DataFrame
 df_by_sal = df.groupby("Fecha")\
               .aggregate(sueldo_mensual=pd.NamedAgg(column="Sueldo Neto", aggfunc=pd.DataFrame.mean))
 # df_by_sal["sueldo_mensual"] = df_by_sal["sueldo_mensual"]**10
-print_tabulate(df_by_sal.head(5))
+df_by_sal.reset_index(inplace=True)
+print_tabulate(df_by_sal.head())
 linear_regression(df_by_sal, "Fecha", "sueldo_mensual")

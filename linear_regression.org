@@ -41,7 +41,7 @@ df_by_sal = df.groupby("Fecha")\
               .aggregate(sueldo_mensual=pd.NamedAgg(column="Sueldo Neto", aggfunc=pd.DataFrame.mean))
 # df_by_sal["sueldo_mensual"] = df_by_sal["sueldo_mensual"]**10
 df_by_sal.reset_index(inplace=True)
-print_tabulate(df_by_sal.head(5))
+print_tabulate(df_by_sal.head())
 linear_regression(df_by_sal, "Fecha", "sueldo_mensual")
 
 #+END_SRC
@@ -55,36 +55,33 @@ linear_regression(df_by_sal, "Fecha", "sueldo_mensual")
 | 2 | 2020-02-01 |        11231.7 |
 | 3 | 2020-03-01 |        11289.4 |
 | 4 | 2020-04-01 |          11735 |
-/home/jhernandez/.pyvenv/37/lib64/python3.7/site-packages/scipy/stats/stats.py:1604: UserWarning: kurtosistest only valid for n>=20 ... continuing anyway, n=12
-  "anyway, n=%i" % int(n))
                             OLS Regression Results
 ==============================================================================
-Dep. Variable:         sueldo_mensual   R-squared:                       0.148
-Model:                            OLS   Adj. R-squared:                  0.063
-Method:                 Least Squares   F-statistic:                     1.738
-Date:                Mon, 12 Apr 2021   Prob (F-statistic):              0.217
-Time:                        18:52:57   Log-Likelihood:                -89.286
-No. Observations:                  12   AIC:                             182.6
-Df Residuals:                      10   BIC:                             183.5
+Dep. Variable:         sueldo_mensual   R-squared:                       0.450
+Model:                            OLS   Adj. R-squared:                  0.425
+Method:                 Least Squares   F-statistic:                     18.01
+Date:                Sat, 26 Mar 2022   Prob (F-statistic):           0.000333
+Time:                        11:43:43   Log-Likelihood:                -206.94
+No. Observations:                  24   AIC:                             417.9
+Df Residuals:                      22   BIC:                             420.2
 Df Model:                           1
 Covariance Type:            nonrobust
 ==============================================================================
                  coef    std err          t      P>|t|      [0.025      0.975]
 ------------------------------------------------------------------------------
-const        1.11e+04    245.201     45.285      0.000    1.06e+04    1.17e+04
-0             49.7754     37.761      1.318      0.217     -34.360     133.911
+const        1.08e+04    555.670     19.444      0.000    9652.099     1.2e+04
+0            175.6864     41.398      4.244      0.000      89.832     261.541
 ==============================================================================
-Omnibus:                        6.931   Durbin-Watson:                   2.317
-Prob(Omnibus):                  0.031   Jarque-Bera (JB):                3.405
-Skew:                          -1.254   Prob(JB):                        0.182
-Kurtosis:                       3.719   Cond. No.                         12.4
+Omnibus:                       21.999   Durbin-Watson:                   2.091
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):               30.053
+Skew:                           1.949   Prob(JB):                     2.98e-07
+Kurtosis:                       6.855   Cond. No.                         26.1
 ==============================================================================
 
 Notes:
 [1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
-/home/jhernandez/.pyvenv/37/lib64/python3.7/site-packages/scipy/stats/stats.py:1604: UserWarning: kurtosistest only valid for n>=20 ... continuing anyway, n=12
-  "anyway, n=%i" % int(n))
 :end:
 
 
-[[file:img/scatter_sueldo_mensual_Fecha.png]]   [[file:img/lr_sueldo_mensual_Fecha.png]]         [[file:img/lr_Nombre_Fecha.png]]
+[[file:img/scatter_sueldo_mensual_Fecha.png]]   [[file:img/lr_sueldo_mensual_Fecha.png]]
+[[file:img/lr_Nombre_Fecha.png]]

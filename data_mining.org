@@ -17,16 +17,15 @@
 ** Themes
 1) Class Introduction
 2) Data Cleaning
-3) Data Parsing
-4) Descriptive Statistics
-5) Data Visualization
-6) Statistic Test
-7) Linear Models
-8) Forecasting
-9) Data classification
-10) Data clustering
-11) Text analysis
-12) RNN
+3) Descriptive Statistics
+4) Data Visualization
+5) Statistic Test
+6) Linear Models
+7) Forecasting
+8) Data classification
+9) Data clustering
+10) Text analysis
+11) RNN
 ** Score
 - 10 Practices
 ** Tools

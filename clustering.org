@@ -90,7 +90,7 @@ def k_means(points: List[np.array], k: int):
     return mean
 
 
-groups = [(20, 20, "grupo1"), (80, 40, "grupo2"), (200, 200, "grupo3")]
+groups = [(20, 20, "grupo1"), (300, 40, "grupo2"), (200, 200, "grupo3")]
 df = generate_df(groups, 50)
 scatter_group_by("img/clusters.png", df, "x", "y", "label")
 list_t = [
@@ -109,9 +109,9 @@ print(kn)
 
 #+RESULTS:
 :results:
-[[ 95.775       41.075     ]
- [ 24.03174603  26.31746032]
- [205.42553191 206.34042553]]
+[[350.45454545  48.15909091]
+ [ 37.12307692  26.69230769]
+ [199.12195122 223.04878049]]
 :end:
 
 [[file:img/clusters.png]]
