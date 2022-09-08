@@ -91,6 +91,36 @@ def analysis_dependencia(file_name:str)->None:
     print_tabulate(df_by_dep.head())
 
 
+def create_boxplot_by_type(file_name:str, column: str, agg_fn= pd.DataFrame.sum):
+    df_complete = pd.read_csv(file_name)
+    df_by_type = df_complete.groupby([column,"Fecha"])[["Sueldo Neto"]].aggregate(agg_fn)# .count()
+    df_by_type.boxplot(by = column, figsize=(27,18))
+    plt.xticks(rotation=90)
+    plt.savefig(f"img/boxplot_{column}.png")
+    plt.close()
+
+
+def plot_by_dep(df: pd.DataFrame, dep:str)->None:
+    df[df["dependencia"] == dep].plot(y =["Sueldo Neto"])
+    plt.savefig(f"img/lt_{dep}.png")
+    df[df["dependencia"] == dep].boxplot(by ='dependencia')
+    plt.savefig(f"img/bplt_{dep}.png")
+
+
+def create_plot_por_dependencia(file_name:str):
+    df_complete = pd.read_csv(file_name)
+    df_by_dep = df_complete.groupby(["dependencia", "Fecha"])[["Sueldo Neto"]].aggregate(pd.DataFrame.mean)
+    df_by_dep.reset_index(inplace=True)
+    df_by_dep.set_index("Fecha", inplace=True)
+
+    for dep in set(df_by_dep["dependencia"]):
+       plot_by_dep(df_by_dep, dep)
+    df_aux = df_complete.groupby(["Fecha","dependencia"])[['Sueldo Neto']].mean().unstack()
+    df_aux.plot(y = 'Sueldo Neto', legend=False, figsize=(32,18))
+    plt.xticks(rotation=90)
+    plt.savefig("img/foo.png")
+    plt.close()
+
 def analysis(file_name:str)->None:
     df_complete = pd.read_csv(file_name)
     # print_tabulate(df_complete[["dependencia","Tipo"]].drop_duplicates().head(150))
@@ -140,11 +170,6 @@ def analysis(file_name:str)->None:
     # plt.savefig("img/boxplot.png")# , bbox_inches='tight')
     # plt.close()
 
-def plot_by_dep(df: pd.DataFrame, dep:str)->None:
-    df[df["dependencia"] == dep].plot(y =["Sueldo Neto"])
-    plt.savefig(f"img/lt_{dep}.png")
-    df[df["dependencia"] == dep].boxplot(by ='dependencia')
-    plt.savefig(f"img/bplt_{dep}.png")
 
 
 def create_typed_df(filename:str)-> pd.DataFrame:
@@ -199,13 +224,15 @@ if __name__ == "__main__":
     # show_salary_and_count_by_type_and_date()
     # show_salary_and_count_by_dependency_and_date()
     # analysis("csv/uanl.csv")
+    create_boxplot_by_type("csv/typed_uanl.csv", 'dependencia', pd.DataFrame.mean)#"Tipo")
+    # create_plot_por_dependencia("csv/typed_uanl.csv")
 
 #+END_SRC
 
 #+RESULTS:
 :results:
 :end:
-# [[file:img/boxplot.png]]
+[[file:img/boxplot_dependencia.png]]
 
 * Estados
 
