@@ -121,6 +121,29 @@ def create_plot_por_dependencia(file_name:str):
     plt.savefig("img/foo.png")
     plt.close()
 
+def anova(df_aux: pd.DataFrame, str_ols: str):
+    # shaphiro-wills
+    # Levenes or barletts
+    modl = ols(str_ols, data=df_aux).fit()
+    anova_df = sm.stats.anova_lm(modl, typ=2)
+    if anova_df["PR(>F)"][0] < 0.005:
+        print("hay diferencias")
+        print(anova_df)
+        # Prueba tukey
+        # imprimir los resultados
+    else:
+        print("No hay diferencias")
+
+def anova_1(file_name: str):
+    df_complete = pd.read_csv(file_name)
+    df_by_type = df_complete.groupby(["Tipo", "Fecha"])[["Sueldo Neto"]].aggregate(pd.DataFrame.sum)
+    df_by_type.reset_index(inplace=True)
+    df_by_type.set_index("Fecha", inplace=True)
+    df_by_type.reset_index(inplace=True)
+    df_aux = df_by_type.rename(columns={"Sueldo Neto": "GastoSalarios"}).drop(['Fecha'], axis=1)
+    print(df_aux.head())
+    anova(df_aux, "GastoSalarios ~ Tipo")
+
 def analysis(file_name:str)->None:
     df_complete = pd.read_csv(file_name)
     # print_tabulate(df_complete[["dependencia","Tipo"]].drop_duplicates().head(150))
@@ -224,15 +247,16 @@ if __name__ == "__main__":
     # show_salary_and_count_by_type_and_date()
     # show_salary_and_count_by_dependency_and_date()
     # analysis("csv/uanl.csv")
-    create_boxplot_by_type("csv/typed_uanl.csv", 'dependencia', pd.DataFrame.mean)#"Tipo")
+    # create_boxplot_by_type("csv/typed_uanl.csv", 'dependencia', pd.DataFrame.mean)#"Tipo")
     # create_plot_por_dependencia("csv/typed_uanl.csv")
+    anova_1("csv/typed_uanl.csv")
 
 #+END_SRC
 
 #+RESULTS:
 :results:
 :end:
-[[file:img/boxplot_dependencia.png]]
+
 
 * Estados
 
