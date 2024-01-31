@@ -73,9 +73,12 @@ def k_means(points: List[np.array], k: int):
     y = np.random.randint(0, num_cluster, N)
 
     mean = np.zeros((num_cluster, DIM))
+    # print(f"mean_init: {mean}")
     for t in range(iterations):
         for k in range(num_cluster):
             mean[k] = np.mean(x[y == k], axis=0)
+
+        # print(f"mean_fin: {mean}")
         for i in range(N):
             dist = np.sum((mean - x[i]) ** 2, axis=1)
             pred = np.argmin(dist)
@@ -102,16 +105,15 @@ labels = [label for _, label in list_t]
 # np.random.seed(0)
 kn = k_means(
     points,
-    3,
+    3 ,
 )
 print(kn)
 #+end_src
 
 #+RESULTS:
 :results:
-[[350.45454545  48.15909091]
- [ 37.12307692  26.69230769]
- [199.12195122 223.04878049]]
+[[287.98717949 128.46153846]
+ [ 49.11111111  41.41666667]]
 :end:
 
 [[file:img/clusters.png]]

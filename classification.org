@@ -80,28 +80,29 @@ def k_nearest_neightbors(
     ]
 
 
-groups = [(20, 20, "grupo1"), (80, 40, "grupo2"), (200, 200, "grupo3")]
+groups = [(20, 20, "grupo1"), (100, 50, "grupo2"), (200, 430, "grupo3")]
 df = generate_df(groups, 50)
 scatter_group_by("img/groups.png", df, "x", "y", "label")
 list_t = [
     (np.array(tuples[0:1]), tuples[2])
     for tuples in df.itertuples(index=False, name=None)
 ]
-points = [point for point, _ in list_t]
+input_data = [point for point, _ in list_t]
 labels = [label for _, label in list_t]
-
+new_points = [np.array([100, 150]), np.array([1, 1]), np.array([1, 300]), np.array([80, 40]), np.array([400, 400])] # y, x
 kn = k_nearest_neightbors(
-    points,
+    input_data,
     labels,
-    [np.array([100, 150]), np.array([1, 1]), np.array([1, 300]), np.array([80, 40])],
+    new_points,
     5,
 )
-print(kn)
+print(f"{new_points}, {kn}")
 #+end_src
 
 #+RESULTS:
 :results:
-[ModeResult(mode=array(['grupo3'], dtype='<U6'), count=array([3])), ModeResult(mode=array(['grupo1'], dtype='<U6'), count=array([2])), ModeResult(mode=array(['grupo3'], dtype='<U6'), count=array([3])), ModeResult(mode=array(['grupo2'], dtype='<U6'), count=array([4]))]
+qt.qpa.plugin: Could not find the Qt platform plugin "wayland" in ""
+[array([100, 150]), array([1, 1]), array([  1, 300]), array([80, 40]), array([400, 400])], [ModeResult(mode=array(['grupo2'], dtype='<U6'), count=array([3])), ModeResult(mode=array(['grupo1'], dtype='<U6'), count=array([2])), ModeResult(mode=array(['grupo2'], dtype='<U6'), count=array([3])), ModeResult(mode=array(['grupo2'], dtype='<U6'), count=array([4])), ModeResult(mode=array(['grupo3'], dtype='<U6'), count=array([5]))]
 :end:
 
 [[file:img/groups.png]]

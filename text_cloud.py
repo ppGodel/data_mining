@@ -14,13 +14,13 @@ all_words = ""
 frase = open_file("texto.txt") # "hola a todos muchas  palabras palabras hola muchas hola hola hola palabras palabras hola muchas hola hola hola palabras palabras hola muchas hola hola hola palabras palabras hola muchas hola hola hola"
 palabras = frase.rstrip().split(" ")
 
-Counter(" ".join(palabras).split()).most_common(10)
+# Counter(" ".join(palabras).split()).most_common(10)
 # looping through all incidents and joining them to one text, to extract most common words
 for arg in palabras:
     tokens = arg.split()
     all_words += " ".join(tokens) + " "
 
-print(all_words)
+# print(all_words)
 wordcloud = WordCloud(
     background_color="white", min_font_size=5
 ).generate(all_words)

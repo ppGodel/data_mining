@@ -116,30 +116,30 @@ def normalize_distribution(dist: np.array, n: int)->np.array:
     c = (b / np.sum(b)) * n
     return np.round(c)
 
-# begin_date = '2016-01-01'
-# end_date = '2023-01-01'
-# date_range = pd.date_range(start=begin_date, end=end_date, freq='1D')
-# norm_dist = np.random.standard_normal(len(date_range))
-# sales = normalize_distribution(norm_dist, 100*len(date_range))
-# df = pd.DataFrame({'Fecha': date_range, 'ventas': sales}) # type: pd.DataFrame
-# df.to_csv('csv/sales.csv', index=False)
+begin_date = '2016-01-01'
+end_date = '2023-01-01'
+date_range = pd.date_range(start=begin_date, end=end_date, freq='1D')
+norm_dist = np.random.standard_normal(len(date_range))
+sales = normalize_distribution(norm_dist, 100*len(date_range))
+df = pd.DataFrame({'Fecha': date_range, 'ventas': sales}) # type: pd.DataFrame
+df.to_csv('csv/sales.csv', index=False)
 
 full_df = pd.read_csv('csv/sales.csv')
 print(f"full -> mean: {np.mean(full_df['ventas'])}, sd: {np.std(full_df['ventas'])}")
 df = full_df.tail(50)
 x = "Fecha"
 y= "ventas"
-# full_df.plot(x=x,y=y, kind='scatter')
-# plt.xticks(rotation=90)
-# plt.savefig('img/full_ventas_Fecha_m.png')
-# plt.close()
+full_df[full_df["Fecha"]>'2022-12-01'].plot(x=x,y=y, kind='scatter')
+plt.xticks(rotation=90)
+plt.savefig('img/full_ventas_Fecha_m.png')
+plt.close()
 
 df.plot(x=x,y=y, kind='scatter')
 a = linear_regression(df, x,y)
 plt_lr(df=df, x=x, y=y, colors=('red', 'orange'), **a)
 a = linear_regression(df.tail(5), x,y)
 plt_lr(df=df.tail(5), x=x, y=y, colors=('red', 'orange'), **a)
-df_j = df[pd.to_datetime(df[x]).dt.dayofweek == 4]
+df_j = df[pd.to_datetime(df[x]).dt.dayofweek == 1]
 print_tabulate(df_j)
 a = linear_regression(df_j, x,y)
 plt_lr(df=df_j, x=x, y=y, colors=('blue', 'blue'), **a)
@@ -167,67 +167,68 @@ print(lrs_p)
 
  #+RESULTS:
  :results:
- full -> mean: 99.9917904612979, sd: 32.48812152926464
- /var/home/jhernandez/.local/lib/python3.10/site-packages/statsmodels/stats/stattools.py:74: ValueWarning: omni_normtest is not valid with less than 8 observations; 5 samples were given.
+ full -> mean: 99.99413604378421, sd: 29.088195349566618
+ /usr/local/lib64/python3.9/site-packages/statsmodels/stats/stattools.py:74: ValueWarning: omni_normtest is not valid with less than 8 observations; 5 samples were given.
    warn("omni_normtest is not valid with less than 8 observations; %i "
- /var/home/jhernandez/.local/lib/python3.10/site-packages/statsmodels/stats/stattools.py:74: ValueWarning: omni_normtest is not valid with less than 8 observations; 5 samples were given.
+ /usr/local/lib64/python3.9/site-packages/statsmodels/stats/stattools.py:74: ValueWarning: omni_normtest is not valid with less than 8 observations; 5 samples were given.
    warn("omni_normtest is not valid with less than 8 observations; %i "
- /var/home/jhernandez/.local/lib/python3.10/site-packages/statsmodels/stats/stattools.py:74: ValueWarning: omni_normtest is not valid with less than 8 observations; 5 samples were given.
+ /usr/local/lib64/python3.9/site-packages/statsmodels/stats/stattools.py:74: ValueWarning: omni_normtest is not valid with less than 8 observations; 5 samples were given.
    warn("omni_normtest is not valid with less than 8 observations; %i "
  |      | Fecha      |   ventas |
  |------+------------+----------|
- | 2513 | 2022-11-18 |       86 |
- | 2520 | 2022-11-25 |       64 |
- | 2527 | 2022-12-02 |       91 |
- | 2534 | 2022-12-09 |      125 |
- | 2541 | 2022-12-16 |       80 |
- | 2548 | 2022-12-23 |      118 |
- | 2555 | 2022-12-30 |       58 |
- /var/home/jhernandez/.local/lib/python3.10/site-packages/statsmodels/stats/stattools.py:74: ValueWarning: omni_normtest is not valid with less than 8 observations; 7 samples were given.
+ | 2510 | 2022-11-15 |       98 |
+ | 2517 | 2022-11-22 |      100 |
+ | 2524 | 2022-11-29 |       95 |
+ | 2531 | 2022-12-06 |      130 |
+ | 2538 | 2022-12-13 |      129 |
+ | 2545 | 2022-12-20 |      115 |
+ | 2552 | 2022-12-27 |       74 |
+ /usr/local/lib64/python3.9/site-packages/statsmodels/stats/stattools.py:74: ValueWarning: omni_normtest is not valid with less than 8 observations; 7 samples were given.
    warn("omni_normtest is not valid with less than 8 observations; %i "
- /var/home/jhernandez/.local/lib/python3.10/site-packages/statsmodels/stats/stattools.py:74: ValueWarning: omni_normtest is not valid with less than 8 observations; 7 samples were given.
+ /usr/local/lib64/python3.9/site-packages/statsmodels/stats/stattools.py:74: ValueWarning: omni_normtest is not valid with less than 8 observations; 7 samples were given.
    warn("omni_normtest is not valid with less than 8 observations; %i "
- /var/home/jhernandez/.local/lib/python3.10/site-packages/statsmodels/stats/stattools.py:74: ValueWarning: omni_normtest is not valid with less than 8 observations; 7 samples were given.
+ /usr/local/lib64/python3.9/site-packages/statsmodels/stats/stattools.py:74: ValueWarning: omni_normtest is not valid with less than 8 observations; 7 samples were given.
    warn("omni_normtest is not valid with less than 8 observations; %i "
- /var/home/jhernandez/.local/lib/python3.10/site-packages/scipy/stats/_stats_py.py:1477: UserWarning: kurtosistest only valid for n>=20 ... continuing anyway, n=10
+ /usr/local/lib64/python3.9/site-packages/scipy/stats/_stats_py.py:1769: UserWarning: kurtosistest only valid for n>=20 ... continuing anyway, n=10
    warnings.warn("kurtosistest only valid for n>=20 ... continuing "
- /var/home/jhernandez/.local/lib/python3.10/site-packages/scipy/stats/_stats_py.py:1477: UserWarning: kurtosistest only valid for n>=20 ... continuing anyway, n=10
+ /usr/local/lib64/python3.9/site-packages/scipy/stats/_stats_py.py:1769: UserWarning: kurtosistest only valid for n>=20 ... continuing anyway, n=10
    warnings.warn("kurtosistest only valid for n>=20 ... continuing "
- /var/home/jhernandez/.local/lib/python3.10/site-packages/scipy/stats/_stats_py.py:1477: UserWarning: kurtosistest only valid for n>=20 ... continuing anyway, n=10
+ /usr/local/lib64/python3.9/site-packages/scipy/stats/_stats_py.py:1769: UserWarning: kurtosistest only valid for n>=20 ... continuing anyway, n=10
    warnings.warn("kurtosistest only valid for n>=20 ... continuing "
- /var/home/jhernandez/.local/lib/python3.10/site-packages/statsmodels/stats/stattools.py:74: ValueWarning: omni_normtest is not valid with less than 8 observations; 5 samples were given.
+ /usr/local/lib64/python3.9/site-packages/statsmodels/stats/stattools.py:74: ValueWarning: omni_normtest is not valid with less than 8 observations; 5 samples were given.
    warn("omni_normtest is not valid with less than 8 observations; %i "
- /var/home/jhernandez/.local/lib/python3.10/site-packages/statsmodels/stats/stattools.py:74: ValueWarning: omni_normtest is not valid with less than 8 observations; 5 samples were given.
+ /usr/local/lib64/python3.9/site-packages/statsmodels/stats/stattools.py:74: ValueWarning: omni_normtest is not valid with less than 8 observations; 5 samples were given.
    warn("omni_normtest is not valid with less than 8 observations; %i "
- /var/home/jhernandez/.local/lib/python3.10/site-packages/statsmodels/stats/stattools.py:74: ValueWarning: omni_normtest is not valid with less than 8 observations; 5 samples were given.
+ /usr/local/lib64/python3.9/site-packages/statsmodels/stats/stattools.py:74: ValueWarning: omni_normtest is not valid with less than 8 observations; 5 samples were given.
    warn("omni_normtest is not valid with less than 8 observations; %i "
- /var/home/jhernandez/.local/lib/python3.10/site-packages/statsmodels/stats/stattools.py:74: ValueWarning: omni_normtest is not valid with less than 8 observations; 7 samples were given.
+ /usr/local/lib64/python3.9/site-packages/statsmodels/stats/stattools.py:74: ValueWarning: omni_normtest is not valid with less than 8 observations; 7 samples were given.
    warn("omni_normtest is not valid with less than 8 observations; %i "
- /var/home/jhernandez/.local/lib/python3.10/site-packages/statsmodels/stats/stattools.py:74: ValueWarning: omni_normtest is not valid with less than 8 observations; 7 samples were given.
+ /usr/local/lib64/python3.9/site-packages/statsmodels/stats/stattools.py:74: ValueWarning: omni_normtest is not valid with less than 8 observations; 7 samples were given.
    warn("omni_normtest is not valid with less than 8 observations; %i "
- /var/home/jhernandez/.local/lib/python3.10/site-packages/statsmodels/stats/stattools.py:74: ValueWarning: omni_normtest is not valid with less than 8 observations; 7 samples were given.
+ /usr/local/lib64/python3.9/site-packages/statsmodels/stats/stattools.py:74: ValueWarning: omni_normtest is not valid with less than 8 observations; 7 samples were given.
    warn("omni_normtest is not valid with less than 8 observations; %i "
- /var/home/jhernandez/.local/lib/python3.10/site-packages/scipy/stats/_stats_py.py:1477: UserWarning: kurtosistest only valid for n>=20 ... continuing anyway, n=10
+ /usr/local/lib64/python3.9/site-packages/scipy/stats/_stats_py.py:1769: UserWarning: kurtosistest only valid for n>=20 ... continuing anyway, n=10
    warnings.warn("kurtosistest only valid for n>=20 ... continuing "
- /var/home/jhernandez/.local/lib/python3.10/site-packages/scipy/stats/_stats_py.py:1477: UserWarning: kurtosistest only valid for n>=20 ... continuing anyway, n=10
+ /usr/local/lib64/python3.9/site-packages/scipy/stats/_stats_py.py:1769: UserWarning: kurtosistest only valid for n>=20 ... continuing anyway, n=10
    warnings.warn("kurtosistest only valid for n>=20 ... continuing "
- /var/home/jhernandez/.local/lib/python3.10/site-packages/scipy/stats/_stats_py.py:1477: UserWarning: kurtosistest only valid for n>=20 ... continuing anyway, n=10
+ /usr/local/lib64/python3.9/site-packages/scipy/stats/_stats_py.py:1769: UserWarning: kurtosistest only valid for n>=20 ... continuing anyway, n=10
    warnings.warn("kurtosistest only valid for n>=20 ... continuing "
- /var/home/jhernandez/.local/lib/python3.10/site-packages/statsmodels/stats/stattools.py:74: ValueWarning: omni_normtest is not valid with less than 8 observations; 5 samples were given.
+ /usr/local/lib64/python3.9/site-packages/statsmodels/stats/stattools.py:74: ValueWarning: omni_normtest is not valid with less than 8 observations; 5 samples were given.
    warn("omni_normtest is not valid with less than 8 observations; %i "
- /var/home/jhernandez/.local/lib/python3.10/site-packages/statsmodels/stats/stattools.py:74: ValueWarning: omni_normtest is not valid with less than 8 observations; 5 samples were given.
+ /usr/local/lib64/python3.9/site-packages/statsmodels/stats/stattools.py:74: ValueWarning: omni_normtest is not valid with less than 8 observations; 5 samples were given.
    warn("omni_normtest is not valid with less than 8 observations; %i "
- /var/home/jhernandez/.local/lib/python3.10/site-packages/statsmodels/stats/stattools.py:74: ValueWarning: omni_normtest is not valid with less than 8 observations; 5 samples were given.
+ /usr/local/lib64/python3.9/site-packages/statsmodels/stats/stattools.py:74: ValueWarning: omni_normtest is not valid with less than 8 observations; 5 samples were given.
    warn("omni_normtest is not valid with less than 8 observations; %i "
- /var/home/jhernandez/.local/lib/python3.10/site-packages/scipy/stats/_stats_py.py:1477: UserWarning: kurtosistest only valid for n>=20 ... continuing anyway, n=8
+ /usr/local/lib64/python3.9/site-packages/scipy/stats/_stats_py.py:1769: UserWarning: kurtosistest only valid for n>=20 ... continuing anyway, n=8
    warnings.warn("kurtosistest only valid for n>=20 ... continuing "
- /var/home/jhernandez/.local/lib/python3.10/site-packages/scipy/stats/_stats_py.py:1477: UserWarning: kurtosistest only valid for n>=20 ... continuing anyway, n=8
+ /usr/local/lib64/python3.9/site-packages/scipy/stats/_stats_py.py:1769: UserWarning: kurtosistest only valid for n>=20 ... continuing anyway, n=8
    warnings.warn("kurtosistest only valid for n>=20 ... continuing "
- /var/home/jhernandez/.local/lib/python3.10/site-packages/scipy/stats/_stats_py.py:1477: UserWarning: kurtosistest only valid for n>=20 ... continuing anyway, n=8
+ /usr/local/lib64/python3.9/site-packages/scipy/stats/_stats_py.py:1769: UserWarning: kurtosistest only valid for n>=20 ... continuing anyway, n=8
    warnings.warn("kurtosistest only valid for n>=20 ... continuing "
- [('50D', 67.9494, {'m': -0.9236, 'b': 114.1294, 'r2': 0.143, 'r2_adj': 0.125, 'low_band': 95.489, 'hi_band': 132.77}), ('10D', 20.066599999999994, {'m': -7.1697, 'b': 91.7636, 'r2': 0.332, 'r2_adj': 0.249, 'low_band': 47.528, 'hi_band': 135.999}), ('5D', -12.400000000000006, {'m': -18.8, 'b': 81.6, 'r2': 0.683, 'r2_adj': 0.577, 'low_band': 23.97, 'hi_band': 139.23}), ('jueves', 99.85730000000001, {'m': 2.6786, 'b': 81.1071, 'r2': 0.117, 'r2_adj': -0.06, 'low_band': 50.548, 'hi_band': 111.666}), ('50D-1Y', 127.8339, {'m': 0.7579, 'b': 88.4231, 'r2': 0.133, 'r2_adj': 0.116, 'low_band': 72.15, 'hi_band': 104.696}), ('10D-Y', 153.8665, {'m': 4.8121, 'b': 105.7455, 'r2': 0.234, 'r2_adj': 0.138, 'low_band': 67.826, 'hi_band': 143.665}), ('5D-Y', 165.5, {'m': 8.1, 'b': 125.0, 'r2': 0.23, 'r2_adj': -0.027, 'low_band': 58.203, 'hi_band': 191.797}), ('jueves-Y', 147.3568, {'m': 4.1071, 'b': 114.5, 'r2': 0.095, 'r2_adj': -0.056, 'low_band': 61.372, 'hi_band': 167.628})]
+ [('50D', 96.7985, {'m': -0.2557, 'b': 109.5835, 'r2': 0.016, 'r2_adj': -0.004, 'low_band': 93.258, 'hi_band': 125.909}), ('10D', 105.7336, {'m': 1.897, 'b': 86.7636, 'r2': 0.023, 'r2_adj': -0.099, 'low_band': 33.207, 'hi_band': 140.32}), ('5D', 128.0, {'m': 7.4, 'b': 91.0, 'r2': 0.154, 'r2_adj': -0.128, 'low_band': 12.875, 'hi_band': 169.125}), ('jueves', 104.7144, {'m': -0.2857, 'b': 106.7143, 'r2': 0.001, 'r2_adj': -0.199, 'low_band': 68.112, 'hi_band': 145.317}), ('50D-1Y', 104.0542, {'m': 0.0391, 'b': 102.021, 'r2': 0.001, 'r2_adj': -0.019, 'low_band': 87.626, 'hi_band': 116.416}), ('10D-Y', 97.6, {'m': -1.0, 'b': 107.6, 'r2': 0.006, 'r2_adj': -0.118, 'low_band': 50.622, 'hi_band': 164.578}), ('5D-Y', 96.3, {'m': 0.3, 'b': 94.8, 'r2': 0.0, 'r2_adj': -0.333, 'low_band': 4.514, 'hi_band': 185.086}), ('jueves-Y', 109.2859, {'m': 1.4524, 'b': 97.6667, 'r2': 0.019, 'r2_adj': -0.145, 'low_band': 53.559, 'hi_band': 141.774})]
  :end:
 
 [[file:img/full_ventas_Fecha_m.png]]
 
 [[file:img/lr_ventas_Fecha_m.png]]
+[[file:img/full_ventas_Fecha_m.png]]

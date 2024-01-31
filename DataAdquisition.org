@@ -26,10 +26,6 @@ def print_tabulate(df: pd.DataFrame):
 
 #+END_SRC
 
-#+RESULTS: includes-base-fn
-:results:
-:end:
-
 
 * UANL
 Código para extraer la información de transparencia de la UANL
@@ -78,7 +74,7 @@ def get_info_transparencia_uanl(periodo: str, area: str, page:int = 1) -> pd.Dat
         df = pd.DataFrame()
     return df
 
-def unir_datos(ldf: List[pd.DataFrame], dependencia:str, mes: str, anio:str) -> pd.DataFrame:
+def unir_datos(ldf: List[pd.DataFrame], dependencia:Tuple[str,str], mes: str, anio:str) -> pd.DataFrame:
     if len(ldf) > 0:
         df = pd.concat(ldf)
         df["dependencia"] = [dependencia[1] for i in range(0, obtener_cantidad_de_filas(df))]
@@ -102,7 +98,7 @@ for anio in listado_anios:
             udf = unir_datos(ldf, dependencia, mes, anio)
             ldfs.append(udf)
 df = pd.concat(ldfs)
-df.to_csv("csv/uanl2021.csv", index=False)
+df.to_csv("csv/uanl2024.csv", index=False)
 #+END_SRC
 
 
@@ -124,7 +120,7 @@ def wiki() -> pd.DataFrame:
         #  for column in columns:
         #    listado_de_valores_en_columnas.append(coulmn.text.strip())
         listado_de_valores_en_columnas = [column.text.strip() for column in columns]
-        list_of_lists.append(listado_de_valores_en_columnas)
+        list_o_lists.append(listado_de_valores_en_columnas)
 
     return pd.DataFrame(list_of_lists, columns=[header.text.strip() for header in  rows[0].find_all('th')])
 
@@ -136,40 +132,6 @@ df.to_csv("csv/estados.csv", index=False)
 
 #+RESULTS:
 :results:
-|    | State               | Official name[a]               | Coat of arms | Capital                   | Largest city                   | Area (1,972,550 km2 total)[6]  | Population (2020; 126,014,024 total)[7] | Municipalities | Order of Admissionto Federation | Date of Admissionto Federation |
-|----+---------------------+--------------------------------+--------------+---------------------------+--------------------------------+--------------------------------+-----------------------------------------+----------------+---------------------------------+--------------------------------|
-|  0 | Aguascalientes      | Aguascalientes                 |              | Aguascalientes            | 5,615.7 km2 (2,168.2 sq mi)    | 1,425,607                      |                                      11 |             24 | February 5, 1857[8]             |                                |
-|  1 | Baja California     | Baja California                |              | Mexicali                  | Tijuana                        | 71,450.0 km2 (27,587.0 sq mi)  |                               3,769,020 |              6 | 29                              | January 16, 1952[9]            |
-|  2 | Baja California Sur | Baja California Sur            |              | La Paz                    | 73,909.4 km2 (28,536.6 sq mi)  | 798,447                        |                                       5 |             31 | October 8, 1974[10]             |                                |
-|  3 | Campeche            | Campeche                       |              | San Francisco de Campeche | 57,484.9 km2 (22,195.0 sq mi)  | 928,363                        |                                      13 |             25 | April 29, 1863[11]              |                                |
-|  4 | Chiapas             | Chiapas                        |              | Tuxtla Gutiérrez          | 73,311.0 km2 (28,305.5 sq mi)  | 5,543,828                      |                                     124 |             19 | September 14, 1824[12]          |                                |
-|  5 | Chihuahua           | Chihuahua                      |              | Chihuahua                 | Ciudad Juárez                  | 247,412.6 km2 (95,526.5 sq mi) |                               3,741,869 |             67 | 18                              | July 6, 1824[12]               |
-|  6 | Coahuila[b][c]      | Coahuila de Zaragoza           |              | Saltillo                  | 151,594.8 km2 (58,531.1 sq mi) | 3,146,771                      |                                      38 |             16 | May 7, 1824[12]                 |                                |
-|  7 | Colima[d]           | Colima                         |              | Colima                    | Manzanillo                     | 5,626.9 km2 (2,172.6 sq mi)    |                                 731,391 |             10 | 23                              | September 12, 1856[14]         |
-|  8 | Durango             | Durango                        |              | Victoria de Durango       | 123,364.0 km2 (47,631.1 sq mi) | 1,832,650                      |                                      39 |             17 | May 22, 1824[12]                |                                |
-|  9 | Guanajuato          | Guanajuato                     |              | Guanajuato                | León de los Aldama             | 30,606.7 km2 (11,817.3 sq mi)  |                               6,166,934 |             46 | 2                               | December 20, 1823[12]          |
-| 10 | Guerrero            | Guerrero                       |              | Chilpancingo de los Bravo | Acapulco de Juárez             | 63,595.9 km2 (24,554.5 sq mi)  |                               3,540,685 |             81 | 21                              | October 27, 1849[15]           |
-| 11 | Hidalgo             | Hidalgo                        |              | Pachuca de Soto           | 20,821.4 km2 (8,039.2 sq mi)   | 3,082,841                      |                                      84 |             26 | January 16, 1869[16]            |                                |
-| 12 | Jalisco             | Jalisco                        |              | Guadalajara               | 78,595.9 km2 (30,346.0 sq mi)  | 8,348,151                      |                                     125 |              9 | December 23, 1823[12]           |                                |
-| 13 | México              | México                         |              | Toluca de Lerdo           | Ecatepec de Morelos            | 22,351.8 km2 (8,630.1 sq mi)   |                              16,992,418 |            125 | 1                               | December 20, 1823[12]          |
-| 14 | Mexico City[e]      | Ciudad de México               |              | Mexico City               | 1,494.3 km2 (577.0 sq mi)      | 9,209,944                      |                            16(boroughs) |             32 | January 29, 2016                |                                |
-| 15 | Michoacán           | Michoacán de Ocampo            |              | Morelia                   | 58,598.7 km2 (22,625.1 sq mi)  | 4,748,846                      |                                     113 |              5 | December 22, 1823[12]           |                                |
-| 16 | Morelos             | Morelos                        |              | Cuernavaca                | 4,878.9 km2 (1,883.8 sq mi)    | 1,971,520                      |                                      36 |             27 | April 17, 1869[17]              |                                |
-| 17 | Nayarit             | Nayarit                        |              | Tepic                     | 27,856.5 km2 (10,755.5 sq mi)  | 1,235,456                      |                                      20 |             28 | January 26, 1917[18]            |                                |
-| 18 | Nuevo León[c]       | Nuevo León                     |              | Monterrey                 | 64,156.2 km2 (24,770.8 sq mi)  | 5,784,442                      |                                      51 |             15 | May 7, 1824[12]                 |                                |
-| 19 | Oaxaca              | Oaxaca                         |              | Oaxaca de Juárez          | 93,757.6 km2 (36,200.0 sq mi)  | 4,132,148                      |                                     570 |              3 | December 21, 1823[12]           |                                |
-| 20 | Puebla              | Puebla                         |              | Puebla de Zaragoza        | 34,309.6 km2 (13,247.0 sq mi)  | 6,583,278                      |                                     217 |              4 | December 21, 1823[12]           |                                |
-| 21 | Querétaro           | Querétaro                      |              | Santiago de Querétaro     | 11,690.6 km2 (4,513.8 sq mi)   | 2,368,467                      |                                      18 |             11 | December 23, 1823[12]           |                                |
-| 22 | Quintana Roo        | Quintana Roo                   |              | Chetumal                  | Cancún                         | 44,705.2 km2 (17,260.8 sq mi)  |                               1,857,985 |             11 | 30                              | October 8, 1974[19]            |
-| 23 | San Luis Potosí     | San Luis Potosí                |              | San Luis Potosí           | 61,138.0 km2 (23,605.5 sq mi)  | 2,822,255                      |                                      58 |              6 | December 22, 1823[12]           |                                |
-| 24 | Sinaloa             | Sinaloa                        |              | Culiacán Rosales          | 57,365.4 km2 (22,148.9 sq mi)  | 3,026,943                      |                                      18 |             20 | October 14, 1830[20]            |                                |
-| 25 | Sonora[f]           | Sonora                         |              | Hermosillo                | 179,354.7 km2 (69,249.2 sq mi) | 2,944,840                      |                                      72 |             12 | January 10, 1824[12]            |                                |
-| 26 | Tabasco[g]          | Tabasco                        |              | Villahermosa              | 24,730.9 km2 (9,548.7 sq mi)   | 2,402,598                      |                                      17 |             13 | February 7, 1824[12]            |                                |
-| 27 | Tamaulipas[c]       | Tamaulipas                     |              | Ciudad Victoria           | Reynosa                        | 80,249.3 km2 (30,984.4 sq mi)  |                               3,527,735 |             43 | 14                              | February 7, 1824[12]           |
-| 28 | Tlaxcala            | Tlaxcala                       |              | Tlaxcala de Xicohténcatl  | San Pablo del Monte            | 3,996.6 km2 (1,543.1 sq mi)    |                               1,342,977 |             60 | 22                              | December 9, 1856[21]           |
-| 29 | Veracruz            | Veracruz deIgnacio de la Llave |              | Xalapa-Enríquez           | Veracruz                       | 71,823.5 km2 (27,731.2 sq mi)  |                               8,062,579 |            212 | 7                               | December 22, 1823[12]          |
-| 30 | Yucatán[h]          | Yucatán                        |              | Mérida                    | 39,524.4 km2 (15,260.5 sq mi)  | 2,320,898                      |                                     106 |              8 | December 23, 1823[12]           |                                |
-| 31 | Zacatecas           | Zacatecas                      |              | Zacatecas                 | Guadalupe                      | 75,275.3 km2 (29,064.0 sq mi)  |                               1,622,138 |             58 | 10                              | December 23, 1823[12]          |
 :end:
 
 
