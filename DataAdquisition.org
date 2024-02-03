@@ -45,7 +45,8 @@ def limpiar_dato_sueldo(sueldo_txt: str)-> float:
 def get_dependencias_uanl()-> Tuple[List[str],List[str],List[str]]:
     soup = get_soup(f"http://transparencia.uanl.mx/remuneraciones_mensuales/bxd.php")
     table = soup.find_all("table")[0].find_all('tr')
-    listado_dependencias = [(option['value'], limpiar_nombre_dependencia(option.text)) for option in table[1].find_all("option")]
+    listado_dependencias = [(option['value'], limpiar_nombre_dependencia(option.text)) \
+                            for option in table[1].find_all("option")]
     listado_meses = [option['value'] for option in table[2].find_all('td')[0].find_all("option")]
     listado_anios = [option['value'] for option in table[2].find_all('td')[1].find_all("option")]
     return (listado_dependencias,listado_meses, listado_anios)
@@ -64,7 +65,9 @@ def get_info_transparencia_uanl(periodo: str, area: str, page:int = 1) -> pd.Dat
     table = soup.find_all("table")
     try:
         table_row = table[2].find_all('tr')
-        list_of_lists = [[row_column.text.strip() for row_column in row.find_all('td')] for row in table_row]
+        list_of_lists = [[row_column.text.strip() \
+                          for row_column in row.find_all('td')] \
+                            for row in table_row]
         df = pd.DataFrame(list_of_lists[1:], columns=list_of_lists[0])
         df["Sueldo Neto"] = df["Sueldo Neto"].transform(limpiar_dato_sueldo)
         df = df.drop(['Detalle'], axis=1)
