@@ -28,7 +28,9 @@ Estadistica descriptiva a los datos por medio de funciones de agregacion, es imp
 import pandas as pd
 from tabulate import tabulate
 from typing import Tuple, List
+import matplotlib
 
+matplotlib.use('TKAgg')
 
 def print_tabulate(df: pd.DataFrame):
     print(tabulate(df, headers=df.columns, tablefmt='orgtbl'))
@@ -77,14 +79,16 @@ def analysis_dependencia(df_complete: pd.DataFrame)-> pd.DataFrame:
     df_by_dep = df_complete.groupby(["Tipo", "anio"]).agg({'Sueldo Neto': ['sum', 'count', 'mean', 'min', 'max']})
     df_by_dep = df_by_dep.reset_index()
     df_by_dep.columns = ['Tipo', 'anio', 'Suma_Total_sueldos', 'Conteo_Empleados', 'Promedio_sueldo', 'Salario_Minimo', 'Salario_Maximo']
-    print_tabulate(df_by_dep.head())
+    # print_tabulate(df_by_dep.head())
     #df_by_dep = df_complete.groupby(["dependencia", "Fecha"]).agg({'Sueldo Neto': ['sum', 'count', 'mean', 'min', 'max']})
     return df_by_dep
 
 
-def create_boxplot_by_type(file_name:str, column: str, agg_fn= pd.DataFrame.sum):
+def create_boxplot_by_type(file_name:str, column: str, aggregate_functions=['sum']):
     df_complete = pd.read_csv(file_name)
-    df_by_type = df_complete.groupby([column,"Fecha"])[["Sueldo Neto"]].aggregate(agg_fn)# .count()
+    df_by_type = df_complete.groupby([column,"Fecha"]).agg({'Sueldo Neto': aggregate_functions})# .count()
+    df_by_type = df_by_type.reset_index()
+    df_by_type.columns = [column, 'Fecha'] + [f'sueldo_neto_{aggregate_function}' for aggregate_function in aggregate_functions]
     df_by_type.boxplot(by = column, figsize=(27,18))
     plt.xticks(rotation=90)
     plt.savefig(f"img/boxplot_{column}.png")
@@ -93,6 +97,7 @@ def create_boxplot_by_type(file_name:str, column: str, agg_fn= pd.DataFrame.sum)
 
 def plot_by_dep(df: pd.DataFrame, dep:str)->None:
     df[df["dependencia"] == dep].plot(y =["Sueldo Neto"])
+    plt.xticks(rotation=90)
     plt.savefig(f"img/lt_{dep}.png")
     # df[df["dependencia"] == dep].boxplot(by ='dependencia')
     # plt.savefig(f"img/bplt_{dep}.png")
@@ -100,7 +105,7 @@ def plot_by_dep(df: pd.DataFrame, dep:str)->None:
 
 def create_plot_por_dependencia(file_name:str):
     df_complete = pd.read_csv(file_name)
-    df_by_dep = df_complete.groupby(["dependencia", "Fecha"])[["Sueldo Neto"]].agg({'Sueldo Neto': ['count']})
+    df_by_dep = df_complete.groupby(["dependencia", "Fecha"])[["Sueldo Neto"]].agg({'Sueldo Neto': ['sum']})
     df_by_dep.reset_index(inplace=True)
     df_by_dep.set_index("Fecha", inplace=True)
 
@@ -108,7 +113,7 @@ def create_plot_por_dependencia(file_name:str):
        plot_by_dep(df_by_dep, dep)
 
 
-    df_aux = df_complete.groupby(["Fecha","dependencia"])[['Sueldo Neto']].mean().unstack()
+    df_aux = df_complete.groupby(["Fecha","Tipo"])[['Sueldo Neto']].sum().unstack()
     df_aux.plot(y = 'Sueldo Neto', legend=False, figsize=(32,18))
     plt.xticks(rotation=90)
     plt.savefig("img/foo.png")
@@ -233,32 +238,33 @@ def show_salary_and_count_by_dependency_and_date():
     print_tabulate(df_by_type)
 
 
+
 if __name__ == "__main__":
-    # typed_df = create_typed_df("csv/uanl.csv")
     # print_tabulate(typed_df.head(50))
+    # typed_df = create_typed_df("csv/uanl.csv")
     # typed_df.to_csv("csv/typed_uanl.csv", index=False)
+    # typed_df = pd.read_csv("csv/typed_uanl.csv")
     # analyzed_df = analysis_dependencia(typed_df)
+    # print_tabulate(analyzed_df)
+
     # analyzed_df.to_csv("csv/analyzed_uanl.csv", index=False)
     # show_data_by_dependency_and_date()
     # show_data_by_type_and_date()
     # show_salary_and_count_by_type_and_date()
     # show_salary_and_count_by_dependency_and_date()
     # analysis("csv/uanl.csv")
-    create_boxplot_by_type("csv/typed_uanl.csv", 'dependencia', pd.DataFrame.sum)#"Tipo")
-    # create_plot_por_dependencia("csv/typed_uanl.csv")
-    anova_1("csv/typed_uanl.csv")
+
+    # create_boxplot_by_type("csv/typed_uanl.csv", 'Tipo', ["sum"])#"Tipo")
+    create_plot_por_dependencia("csv/typed_uanl.csv")
+
+    # anova_1("csv/typed_uanl.csv")
 
 #+END_SRC
 
 #+RESULTS:
 :results:
-    Tipo  GastoSalarios
-0  ADMIN    18235639.07
-1  ADMIN    18935541.24
-2  ADMIN    18992417.61
-3  ADMIN    19214948.64
-4  ADMIN    19779973.40
-No hay diferencias
+/var/home/jhernandez/.local/lib/python3.12/site-packages/pandas/plotting/_matplotlib/core.py:580: RuntimeWarning: More than 20 figures have been opened. Figures created through the pyplot interface (`matplotlib.pyplot.figure`) are retained until explicitly closed and may consume too much memory. (To control this warning, see the rcParam `figure.max_open_warning`). Consider using `matplotlib.pyplot.close()`.
+  fig = self.plt.figure(figsize=self.figsize)
 :end:
 
 

@@ -67,6 +67,10 @@ def euclidean_distance(p_1: np.array, p_2: np.array) -> float:
 def k_nearest_neightbors(
     points: List[np.array], labels: np.array, input_data: List[np.array], k: int
 ):
+    label_indices = {label:index
+                     for index,label in enumerate(pd.unique(labels))}
+    indices_labels = {index:label
+                      for label,index in label_indices.items()}
     input_distances = [
         [euclidean_distance(input_point, point) for point in points]
         for input_point in input_data
@@ -75,7 +79,7 @@ def k_nearest_neightbors(
         np.argsort(input_point_dist)[:k] for input_point_dist in input_distances
     ]
     return [
-        mode([labels[index] for index in point_nearest])
+        indices_labels[mode([label_indices[labels[index]] for index in point_nearest]).mode]
         for point_nearest in points_k_nearest
     ]
 
@@ -101,8 +105,11 @@ print(f"{new_points}, {kn}")
 
 #+RESULTS:
 :results:
-qt.qpa.plugin: Could not find the Qt platform plugin "wayland" in ""
-[array([100, 150]), array([1, 1]), array([  1, 300]), array([80, 40]), array([400, 400])], [ModeResult(mode=array(['grupo2'], dtype='<U6'), count=array([3])), ModeResult(mode=array(['grupo1'], dtype='<U6'), count=array([2])), ModeResult(mode=array(['grupo2'], dtype='<U6'), count=array([3])), ModeResult(mode=array(['grupo2'], dtype='<U6'), count=array([4])), ModeResult(mode=array(['grupo3'], dtype='<U6'), count=array([5]))]
+/tmp/babel-glUvxR/python-uVLGKe:42: MatplotlibDeprecationWarning: The get_cmap function was deprecated in Matplotlib 3.7 and will be removed two minor releases later. Use ``matplotlib.colormaps[name]`` or ``matplotlib.colormaps.get_cmap(obj)`` instead.
+  return plt.cm.get_cmap(name, n)
+/tmp/babel-glUvxR/python-uVLGKe:67: FutureWarning: unique with argument that is not not a Series, Index, ExtensionArray, or np.ndarray is deprecated and will raise in a future version.
+  for index,label in enumerate(pd.unique(labels))}
+[array([100, 150]), array([1, 1]), array([  1, 300]), array([80, 40]), array([400, 400])], ['grupo2', 'grupo1', 'grupo3', 'grupo2', 'grupo3']
 :end:
 
 [[file:img/groups.png]]

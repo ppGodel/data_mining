@@ -1,8 +1,9 @@
 #+TITLE: Text Cloud
-* Code
+* COMMENT Code
 #+begin_src python :session data :results replace drawer output :exports both :tangle text_cloud.py :noweb yes :eval never-export
 from wordcloud import WordCloud
 from collections import Counter
+from typing import List
 import matplotlib.pyplot as plt
 
 
@@ -24,11 +25,20 @@ all_words = open_file("texto.txt")
 #    all_words += " ".join(tokens) + " "
 
 # print(all_words)
+def remove_words_from_text(words_to_remove: List[str], all_words: str):
+    new_all_words = all_words
+    for word_to_remove in words_to_remove:
+        new_all_words.replace(word_to_remove, "")
+    return new_all_words
+
+remove_words = ["de ", "la ", "que ", "new ", "image "]
+filtered_words = remove_words_from_text(remove_words, all_words)
+# print(filtered_words)
+
 wordcloud = WordCloud(
     background_color="white", min_font_size=5
-).generate(all_words)
+).generate(filtered_words)
 
-# print(all_words)
 # plot the WordCloud image
 plt.close()
 plt.figure(figsize=(5, 5), facecolor=None)
@@ -41,8 +51,227 @@ plt.savefig("img/word_cloud.png")
 plt.close()
 #+end_src
 
-[[img/word_cloud.png
-]]
+#+RESULTS:
+:results:
+Home
+ For you
+ Following
+ News Showcase
+ U.S.
+ World
+ Local
+ Business
+ Technology
+ Entertainment
+ Sports
+ Science
+ Health
+ Google News - World - Latest
+ World
+ Israel Says It Is Raiding Gaza's Al-Shifa Hospital: Israel-Hamas War Live News
+ 28 minutes ago
+ James C. McKinley Jr.
+ CBS News
+ Gaza hospital sounds alarm of imminent collapse
+ 6 hours ago
+ CNN
+ Israel-Hamas war rages as outcry grows over Gaza crisis: Live updates
+ 1 hour ago
+ Mike Hayes, Leinz Vales & Sana Noor Haq
+ New York Post
+ Stop pretending hospital peril is all on Israel, Joe, and call out Hamas' central role in endangering civilians
+ Yesterday
+ Opinion
+ Full Coverage
+ Former British home secretary Suella Braverman accuses PM Sunak of betraying promises in resignation letter
+ 5 hours ago
+ Louis Casiano
+ CNN-News18
+ AlKings1958 reposted
+ Jackie bot 🤖💎
+ @Jackie2theworld
+ ·
+ 11h
+ Wow!!! No soy de escuchar mucho rap… pero está con madre ésto!!!
+ 😂😂😂😂👇👇👏👏👏👏👏
+ Quote
+ ✨✘Lucy Sky✘✨
+ @Moonlight_Blue4
+ ·
+ 11h
+ No permitas que nadie calle tu canto, eres la voz de muchos. ❌🩷❌
+
+ Estamos tratando de sobrevivir a una lucha de libertad o de sometimiento, por un largo periodo; pues estos evitarán que cualquier mexicano levante la voz o la mano.
+ #DespiertaMéxico ‼️
+ Show more
+ 0:02 / 1:55
+ Padre del Análisis Superior reposted
+ Ixaraxel.F.R.🫠
+ @Ixaraxelfl
+ ·
+ 32m
+ Replying to
+ @jaurysalazar
+  and
+ @DavidPramo2
+ Mamamela junto con tu gfa, tienen promoción para hoy par de p..taz
+ Padre del Análisis Superior
+ @DavidPramo2
+ ·
+ 14m
+ Cuando no toleras opiniones diferentes a la tuya
+ Quote
+ Rafael Solano
+ @RafaelS6711
+ ·
+ 19m
+ Replying to @CiroGomezL and @DavidPramo2
+ A @DavidPramo2 prefiero ya no escucharlo, después de su desafortunado comentario, “que los banqueros” le dijeron que Claudia estaba más “preparada”, por favor eso no se lo cree ni él, los mexicanos vimos otra cosa en la convención bancaria. #MiVotoParaXochitl10
+ AlKings1958 reposted
+ Rafaela Sanders
+ @RafaelSanders22
+ ·
+ Apr 25
+ Parecen modelos ….. de Botero!!!
+ 🤣🤣🤣🤣🤣🤣🤣🤣🤣🤣🤣🤣🤣
+ Quote
+ Fredd
+ @FREDDO1479
+ ·
+ Apr 25
+ ¿Título para la fotó ??
+ Image
+ EL NORTE
+ @elnorte
+ ·
+ 15m
+ El regio Pato O'Ward marcó el sexto mejor tiempo de la Práctica 2 del Gran Premio de Alabama, sesión que lideró Rinus VeeKay.
+ With the No. 134 overall pick in the 2024 @NFLDraft
+ , the @nyjets
+  select Braelon Allen!
+
+ 📺: #NFLDraft on NFLN/ESPN/ABC
+ 📱: Stream on #NFLPlus
+ Image
+ Freya 🔜✈️ Guadalindie, Málaga, 2-5th May
+ @FreyaHolmer
+ ·
+ 1h
+ so a js minifier broke my code - and now, after a long and arduous search, I have narrowed it down to the fact that it breaks specifically when mangling an identifier starting with c 🔍🕵️‍♀️
+ a javascript minifier config that reads: // regex: /disbale_all m // confirmed safe: x-z // unsafe inside a-e // wait i messed up // a,b,d is safe // c is unsafe regex: /^[^c].*$/i, // reserved: ["setupSelf
+ Freya 🔜✈️ Guadalindie, Málaga, 2-5th May
+ @FreyaHolmer
+ ·
+ 14m
+ oKAY apparently I have a load-bearing identifier called "coefficient" (??)
+
+ if I search my project for "coefficient", nothing comes up. if I disallow mangling the word "coefficient", the code works fine. how is this even possible
+ Image
+ Freya 🔜✈️ Guadalindie, Málaga, 2-5th May
+ @FreyaHolmer
+ ·
+ 3m
+ okay I might've been using this regex wrong, which would make more sense
+ INFO7
+ @info7mty
+ ·
+ 3m
+ Texas enfrenta un revés legal en su disputa por las boyas en el Río Grande. Un juez federal rechazó su petición para desestimar la demanda del Gobierno de Biden.
+ From info7.mx
+ Carmen Aristegui
+ @aristeguicnn
+ ·
+ 4m
+ ¿Por qué protestan en universidades de EE.UU. a favor de la causa palestina? Una estudiante lo explica
+ From cnnespanol.cnn.com
+ Carmen Aristegui
+ @aristeguicnn
+ ·
+ 4m
+ ¿Cuándo se espera que terminen las protestas propalestinas en universidades de EE.UU.?
+ From cnnespanol.cnn.com
+ Pittsburgh Steelers reposted
+ Russell Wilson
+ @DangeRussWilson
+ ·
+ 7m
+ Congrats @MasonLMcCormick
+
+ Glad to have you in the Burgh! @Steelers
+
+ Domesticated Brain
+ @rasangarocks
+ ·
+ 17m
+ Algorithms to Live By: The Computer Science of Human Decisions
+
+ Link - https://amzn.to/4aURZ7I
+
+ #algorithms #Maths #100DaysOfCode #CodeNewbies #WomenWhoCode #code #coding #DataScientists #IA #ML #programming
+ From amazon.com
+ danielle
+ @_danielle_carr
+ ·
+ 19m
+ How much have we heard in media about that one person who wasn’t even a part of the Columbia camp saying “go back to Poland”? Meanwhile at ucla, the camp is constantly dealing with actual attacks from people who are clearly coming from outside the uni with violent intent
+ Square profile picture
+ NASA
+ @NASA
+ ·
+ 19m
+ This week at NASA:
+
+ Prelaunch activities are underway at @NASAKennedy
+  ahead of the #Starliner Crew Flight Test on May 6, studying the Sun’s effects on Earth during the recent eclipse, and we celebrate our home planet for #EarthDay.
+
+ For all this and more: http://nasa.gov/subscribe
+ Square profile picture
+ NFL
+ @NFL
+ ·
+ 19m
+ With the No. 127 overall pick in the 2024 @NFLDraft
+ , the @Eagles
+  select Will Shipley!
+
+ 📺: #NFLDraft on NFLN/ESPN/ABC
+ 📱: Stream on #NFLPlus
+ Image
+ AlKings1958 reposted
+ 𝕏 ΣTH
+ @SethPacko
+ ·
+ 13h
+ La Santa Mierda !!
+ @lopezobrador_
+
+
+ ☝🏻🙄🍺
+ Image
+ AlKings1958
+ @AKings1958
+ ·
+ 20m
+ La canción favorita de México
+ FreeBSD Frau
+ @freebsdfrau
+ ·
+ 20m
+ 🤔 interesting vise?
+ Image
+ Image
+ Image
+ Image
+ It's FOSS
+ @itsfoss2
+ ·
+ 20m
+ Lightweight and fast!
+
+ Experience the speed of these 7 super lightweight distros.
+:end:
+
+[[file:img/word_cloud.png]]
 #+RESULTS:
 :results:
 :end:

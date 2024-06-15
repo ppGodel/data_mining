@@ -3,25 +3,16 @@
 
 #+begin_src python :session data :results replace drawer output :exports both :tangle classification.py :noweb yes :eval never-export
 import pandas as pd
-from tabulate import tabulate
 import matplotlib.pyplot as plt
-from typing import Tuple, Dict, List
+from typing import Tuple, List
 import numpy as np
-from functools import reduce
 
 
-def print_tabulate(df: pd.DataFrame):
-    print(tabulate(df, headers=df.columns, tablefmt="orgtbl"))
-
-
-def normalize_distribution(dist: np.array, n: int) -> np.array:
-    b = dist - min(dist) + 0.000001
-    c = (b / np.sum(b)) * n
-    return np.round(c)
-
+def create_normal_distribution(mean, sd, size) -> np.array:
+    return np.random.normal(loc=mean, scale=sd,size=size)
 
 def create_distribution(mean: float, size: int) -> pd.Series:
-    return normalize_distribution(np.random.standard_normal(size), mean * size)
+    return create_normal_distribution(mean, mean * 0.25,size)
 
 
 def generate_df(means: List[Tuple[float, float, str]], n: int) -> pd.DataFrame:
@@ -42,7 +33,7 @@ def generate_df(means: List[Tuple[float, float, str]], n: int) -> pd.DataFrame:
 def get_cmap(n, name="hsv"):
     """Returns a function that maps each index in 0, 1, ..., n-1 to a distinct
     RGB color; the keyword argument name must be a standard mpl colormap name."""
-    return plt.cm.get_cmap(name, n)
+    return plt.colormaps.get_cmap(name)
 
 
 def scatter_group_by(
@@ -53,8 +44,9 @@ def scatter_group_by(
     cmap = get_cmap(len(labels) + 1)
     for i, label in enumerate(labels):
         filter_df = df.query(f"{label_column} == '{label}'")
-        ax.scatter(filter_df[x_column], filter_df[y_column], label=label, color=cmap(i))
+        ax.scatter(filter_df[x_column], filter_df[y_column], label=label)
     ax.legend()
+    plt.set_cmap(cmap)
     plt.savefig(file_path)
     plt.close()
 
@@ -63,38 +55,50 @@ def euclidean_distance(p_1: np.array, p_2: np.array) -> float:
     return np.sqrt(np.sum((p_2 - p_1) ** 2))
 
 
+def calculate_means(points: np.array, labels:np.array, clusters: int)-> np.array:
+    mean = []
+    for k in range(clusters):
+        m = np.mean(points[labels == k], axis=0)
+        mean.append(m)
+    return mean
+
+def calculate_nearest_k(point: np.array, actual_means: List[np.array]):
+    distance = [euclidean_distance(mean, point) for mean in actual_means]
+    nearest_k = np.argmin(distance)
+    return (point, nearest_k)
+
 def k_means(points: List[np.array], k: int):
-    DIM = len(points[0])
     N = len(points)
     num_cluster = k
-    iterations = 15
+    max_iterations = 15
 
     x = np.array(points)
     y = np.random.randint(0, num_cluster, N)
 
-    mean = np.zeros((num_cluster, DIM))
+    dimensions = len(points[0])
+    mean = np.zeros((num_cluster, dimensions))
     # print(f"mean_init: {mean}")
-    for t in range(iterations):
-        for k in range(num_cluster):
-            mean[k] = np.mean(x[y == k], axis=0)
-
+    for t in range(max_iterations):
+        actual_mean = calculate_means(points=x, labels=y, clusters=num_cluster)
         # print(f"mean_fin: {mean}")
-        for i in range(N):
-            dist = np.sum((mean - x[i]) ** 2, axis=1)
-            pred = np.argmin(dist)
-            y[i] = pred
+        y = np.array([calculate_nearest_k(point=point, actual_means=actual_mean)[1] for point in x])
 
-    for kl in range(num_cluster):
-        xp = x[y == kl, 0]
-        yp = x[y == kl, 1]
-        plt.scatter(xp, yp)
-    plt.savefig("img/kmeans.png")
-    plt.close()
+        df_points = pd.DataFrame(x, columns=['x','y'])
+        df_points['label'] = np.char.mod('%d', y)
+        df_mean = pd.DataFrame(actual_mean, columns=['x','y'])
+        df_mean['label'] =  ['centroid' for i in range(len(actual_mean))]
+        df = pd.concat([df_points, df_mean])
+        scatter_group_by(file_path=f"img/kmeans_{t}.png", df=df,x_column="x", y_column="y", label_column='label')
+
+        if np.array_equal(actual_mean, mean):
+            break
+        mean = actual_mean.copy()
     return mean
 
 
-groups = [(20, 20, "grupo1"), (300, 40, "grupo2"), (200, 200, "grupo3")]
+groups = [(20, 20, "grupo0"), (300, 40, "grupo1"), (200, 200, "grupo2")]
 df = generate_df(groups, 50)
+print(f'df:{df}')
 scatter_group_by("img/clusters.png", df, "x", "y", "label")
 list_t = [
     (np.array(tuples[0:2]), tuples[2])
@@ -112,9 +116,21 @@ print(kn)
 
 #+RESULTS:
 :results:
-[[287.98717949 128.46153846]
- [ 49.11111111  41.41666667]]
+df:              x           y   label
+0      9.234586   19.550514  grupo0
+1     19.039581   18.286092  grupo0
+2     10.614042   17.422412  grupo0
+3     26.519808   12.377953  grupo0
+4     24.983588   24.909055  grupo0
+..          ...         ...     ...
+145  279.715543  207.123959  grupo2
+146  239.945526  185.951721  grupo2
+147  167.686595  216.324890  grupo2
+148  289.107489  237.567028  grupo2
+149  186.871554  185.343155  grupo2
+
+[150 rows x 3 columns]
+[array([20.53165534, 21.09668023]), array([302.58371571,  41.61639607]), array([212.35660225, 197.49864075])]
 :end:
 
-[[file:img/clusters.png]]
-[[file:img/kmeans.png]]
+ [[file:img/clusters.png]] [[file:img/kmeans_7.png]]

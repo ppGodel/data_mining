@@ -4,8 +4,6 @@ from bs4 import BeautifulSoup
 import pandas as pd
 from tabulate import tabulate
 from typing import Tuple, List
-import re
-import datetime
 
 def get_soup(url: str) -> BeautifulSoup:
     response = requests.get(url)
@@ -83,4 +81,4 @@ for anio in listado_anios:
             udf = unir_datos(ldf, dependencia, mes, anio)
             ldfs.append(udf)
 df = pd.concat(ldfs)
-df.to_csv("csv/uanl_02_2023.csv", index=False)
+df.to_csv("csv/uanl_02_2024.csv", index=False)

@@ -28,7 +28,7 @@ def linear_regression(df: pd.DataFrame, x:str, y: str)->None:
 
     coef = pd.read_html(model.summary().tables[1].as_html(),header=0,index_col=0)[0]['coef']
     df.plot(x=x,y=y, kind='scatter')
-    plt.plot(df[x],[pd.DataFrame.mean(df[y]) for _ in fixed_x.items()], color='green')
+#    plt.plot(df[x],[pd.DataFrame.mean(df[y]) for _ in fixed_x.items()], color='green')
     plt.plot(df_by_sal[x],[ coef.values[1] * x + coef.values[0] for _, x in fixed_x.items()], color='red')
     plt.xticks(rotation=90)
     plt.savefig(f'img/lr_{y}_{x}.png')
@@ -37,54 +37,88 @@ def linear_regression(df: pd.DataFrame, x:str, y: str)->None:
 
 df = pd.read_csv("csv/typed_uanl.csv") # type: pd.DataFrame
 #print_tabulate(df.head(50))
-df_by_sal = df.groupby("Fecha")\
-              .aggregate(sueldo_mensual=pd.NamedAgg(column="Sueldo Neto", aggfunc=pd.DataFrame.max))
+df_by_sal = df.groupby(["Fecha"])[["Sueldo Neto"]].agg({'Sueldo Neto': ['sum']})
+df_by_sal.reset_index(inplace=True)
+df_by_sal.columns = ['Fecha', 'sueldo_neto_sum']
 # df_by_sal["sueldo_mensual"] = df_by_sal["sueldo_mensual"]**10
 df_by_sal.reset_index(inplace=True)
-print_tabulate(df_by_sal.head())
-linear_regression(df_by_sal, "Fecha", "sueldo_mensual")
+print_tabulate(df_by_sal)
+linear_regression(df_by_sal, "Fecha", "sueldo_neto_sum")
 
 #+END_SRC
 
 [[file:img/scatter_sueldo_mensual_Fecha.png]]
 
-[[file:img/lr_sueldo_mensual_Fecha.png]]
+[[file:img/lr_sueldo_neto_sum_Fecha.png]]
 
 [[file:img/lr_Nombre_Fecha.png]]
 
 
 #+RESULTS: regression
 :results:
-|   |      Fecha | sueldo_mensual |
-|---+------------+----------------|
-| 0 | 2019-12-01 |        86245.3 |
-| 1 | 2020-01-01 |        97698.4 |
-| 2 | 2020-02-01 |        97274.6 |
-| 3 | 2020-03-01 |        89433.9 |
-| 4 | 2020-04-01 |          98882 |
+|    | index |      Fecha | sueldo_neto_sum |
+|----+-------+------------+-----------------|
+|  0 |     0 | 2019-12-01 |     1.53328e+08 |
+|  1 |     1 | 2020-01-01 |     1.44083e+08 |
+|  2 |     2 | 2020-02-01 |     1.55728e+08 |
+|  3 |     3 | 2020-03-01 |     1.60423e+08 |
+|  4 |     4 | 2020-04-01 |     1.67916e+08 |
+|  5 |     5 | 2020-05-01 |     1.66246e+08 |
+|  6 |     6 | 2020-06-01 |     1.47802e+08 |
+|  7 |     7 | 2020-07-01 |     1.47529e+08 |
+|  8 |     8 | 2020-08-01 |     1.45536e+08 |
+|  9 |     9 | 2020-09-01 |     1.61763e+08 |
+| 10 |    10 | 2020-10-01 |     1.64021e+08 |
+| 11 |    11 | 2020-11-01 |     1.57825e+08 |
+| 12 |    12 | 2020-12-01 |     2.55034e+08 |
+| 13 |    13 | 2021-01-01 |     1.75606e+08 |
+| 14 |    14 | 2021-02-01 |     1.82539e+08 |
+| 15 |    15 | 2021-03-01 |     1.91843e+08 |
+| 16 |    16 | 2021-04-01 |     1.95685e+08 |
+| 17 |    17 | 2021-05-01 |     1.94907e+08 |
+| 18 |    18 | 2021-06-01 |     2.45305e+08 |
+| 19 |    19 | 2021-07-01 |     1.69289e+08 |
+| 20 |    20 | 2021-08-01 |     1.84234e+08 |
+| 21 |    21 | 2021-09-01 |     1.89083e+08 |
+| 22 |    22 | 2021-10-01 |     1.85428e+08 |
+| 23 |    23 | 2021-11-01 |     1.80208e+08 |
+| 24 |    24 | 2022-02-01 |     1.81314e+08 |
+| 25 |    25 | 2022-03-01 |     1.85642e+08 |
+| 26 |    26 | 2022-04-01 |     1.94367e+08 |
+| 27 |    27 | 2022-05-01 |     1.92297e+08 |
+| 28 |    28 | 2022-06-01 |     2.43082e+08 |
+| 29 |    29 | 2022-07-01 |      1.6798e+08 |
+| 30 |    30 | 2022-08-01 |     1.80584e+08 |
+| 31 |    31 | 2022-09-01 |     1.88499e+08 |
+| 32 |    32 | 2022-10-01 |     1.92625e+08 |
+| 33 |    33 | 2022-11-01 |     1.83365e+08 |
+| 34 |    34 | 2022-12-01 |     2.58759e+08 |
+| 35 |    35 | 2023-01-01 |     1.69536e+08 |
                             OLS Regression Results
 ==============================================================================
-Dep. Variable:         sueldo_mensual   R-squared:                       0.211
-Model:                            OLS   Adj. R-squared:                  0.188
-Method:                 Least Squares   F-statistic:                     9.094
-Date:                Thu, 28 Sep 2023   Prob (F-statistic):            0.00483
-Time:                        20:06:24   Log-Likelihood:                -382.50
-No. Observations:                  36   AIC:                             769.0
-Df Residuals:                      34   BIC:                             772.2
+Dep. Variable:        sueldo_neto_sum   R-squared:                       0.258
+Model:                            OLS   Adj. R-squared:                  0.236
+Method:                 Least Squares   F-statistic:                     11.82
+Date:                Tue, 12 Mar 2024   Prob (F-statistic):            0.00157
+Time:                        20:01:27   Log-Likelihood:                -663.73
+No. Observations:                  36   AIC:                             1331.
+Df Residuals:                      34   BIC:                             1335.
 Df Model:                           1
 Covariance Type:            nonrobust
 ==============================================================================
                  coef    std err          t      P>|t|      [0.025      0.975]
 ------------------------------------------------------------------------------
-const       9.283e+04   3345.292     27.751      0.000     8.6e+04    9.96e+04
-0            495.7025    164.379      3.016      0.005     161.644     829.761
+const       1.578e+08   8.26e+06     19.098      0.000    1.41e+08    1.75e+08
+0           1.396e+06   4.06e+05      3.438      0.002    5.71e+05    2.22e+06
 ==============================================================================
-Omnibus:                       34.184   Durbin-Watson:                   1.918
-Prob(Omnibus):                  0.000   Jarque-Bera (JB):               93.615
-Skew:                           2.216   Prob(JB):                     4.70e-21
-Kurtosis:                       9.539   Cond. No.                         39.9
+Omnibus:                       20.227   Durbin-Watson:                   2.195
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):               26.724
+Skew:                           1.657   Prob(JB):                     1.57e-06
+Kurtosis:                       5.613   Cond. No.                         39.9
 ==============================================================================
 
 Notes:
 [1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+/tmp/babel-FXnTBV/python-ewIG6v:23: FutureWarning: Passing literal html to 'read_html' is deprecated and will be removed in a future version. To read from a literal string, wrap it in a 'StringIO' object.
+  coef = pd.read_html(model.summary().tables[1].as_html(),header=0,index_col=0)[0]['coef']
 :end:
